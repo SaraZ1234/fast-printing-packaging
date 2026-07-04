@@ -3,8 +3,7 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { 
-  ArrowRight, Sparkles, Layers, HardHat, 
-  ShieldCheck, Search, Calculator, HelpCircle
+  ArrowRight, Sparkles, Layers, Search, Calculator, HelpCircle
 } from "lucide-react";
 
 // --- EXPANDED INDUSTRIAL DATA MATRIX ---
@@ -81,13 +80,13 @@ export default function ProductsPage() {
   }, [calcItem, calcVolume]);
 
   return (
-    <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white pt-32 pb-24 antialiased selection:bg-indigo-600 selection:text-white">
+    <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white pt-24 pb-24 antialiased selection:bg-indigo-600 selection:text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
         
         {/* SECTION 1: MASTER COMMAND HERO */}
         <div className="text-center max-w-4xl mx-auto space-y-6">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 text-sm font-black tracking-widest uppercase">
-            <Sparkles className="w-4 h-4" /> Enterprise Fleet Deployment
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 text-xs font-black tracking-widest uppercase">
+            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" /> Enterprise Fleet Deployment
           </span>
           <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[0.95] text-zinc-900 dark:text-white">
             Industrial Printing & Packaging Inventory
@@ -98,13 +97,13 @@ export default function ProductsPage() {
 
           {/* Realtime Multifunctional Search Bar */}
           <div className="max-w-xl mx-auto relative pt-4">
-            <Search className="w-5 h-5 text-zinc-400 absolute left-4 top-7.5" />
+            <Search className="w-5 h-5 text-zinc-400 absolute left-4 top-8" />
             <input 
               type="text" 
               placeholder="Search across asset signatures, machines, names, or categories..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl py-3.5 pl-12 pr-4 text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow shadow-sm"
+              className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl py-3.5 pl-12 pr-4 text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow shadow-sm text-zinc-900 dark:text-white"
             />
           </div>
         </div>
@@ -116,7 +115,7 @@ export default function ProductsPage() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2.5 rounded-xl text-sm font-black tracking-wider uppercase transition-all duration-200 border ${
+                className={`px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all duration-200 border ${
                   selectedCategory === cat
                     ? "bg-indigo-600 border-indigo-500 text-white shadow-lg scale-105"
                     : "bg-white dark:bg-zinc-900 border-zinc-200/60 dark:border-zinc-800 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
@@ -146,7 +145,7 @@ export default function ProductsPage() {
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800/60 pb-3 text-sm">
-                      <span className="font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-950 px-2.5 py-1 rounded">
+                      <span className="font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-950 px-2.5 py-1 rounded text-xs">
                         {product.category}
                       </span>
                       <span className="font-mono font-bold text-indigo-500 text-base">{product.assetKey}</span>
@@ -156,7 +155,7 @@ export default function ProductsPage() {
                       <h3 className="text-xl font-black text-zinc-900 dark:text-white tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         {product.name}
                       </h3>
-                      <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
                         {product.desc}
                       </p>
                     </div>
@@ -164,28 +163,28 @@ export default function ProductsPage() {
                     {/* Extended Technical Meta Block */}
                     <div className="bg-zinc-50 dark:bg-zinc-950 rounded-xl p-4 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 border border-zinc-100 dark:border-zinc-900 text-sm font-medium">
                       <div className="space-y-0.5">
-                        <span className="block text-xs font-bold uppercase tracking-wider text-zinc-400">Velocity Rate</span>
-                        <span className="font-mono text-zinc-800 dark:text-zinc-200 font-bold text-base">{product.throughput}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-zinc-400">Velocity Rate</span>
+                        <span className="font-mono text-zinc-800 dark:text-zinc-200 font-bold text-sm">{product.throughput}</span>
                       </div>
                       <div className="space-y-0.5">
-                        <span className="block text-xs font-bold uppercase tracking-wider text-zinc-400">Substrate Caliper</span>
-                        <span className="font-mono text-zinc-800 dark:text-zinc-200 font-bold text-base truncate block">{product.thickness}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-zinc-400">Substrate Caliper</span>
+                        <span className="font-mono text-zinc-800 dark:text-zinc-200 font-bold text-sm truncate block">{product.thickness}</span>
                       </div>
                       <div className="sm:col-span-2 border-t border-zinc-200/60 dark:border-zinc-800/60 pt-3 flex flex-row justify-between items-center text-sm">
                         <span className="text-zinc-400 font-bold uppercase tracking-wider text-xs">Press Core</span>
-                        <span className="font-mono text-zinc-700 dark:text-zinc-300 font-bold bg-white dark:bg-zinc-900 px-2 py-1 rounded border border-zinc-200 dark:border-zinc-800">{product.optimalPress}</span>
+                        <span className="font-mono text-zinc-700 dark:text-zinc-300 font-bold bg-white dark:bg-zinc-900 px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-800 text-xs">{product.optimalPress}</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="pt-6 flex flex-row items-center justify-between mt-4 border-t border-zinc-100 dark:border-zinc-800/40">
                     <Link 
-                      href={`/products/${product.id}`}
-                      className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 transition-all group-hover:gap-3"
+                      href={`/services/${product.id}`}
+                      className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 transition-all group-hover:gap-3"
                     >
                       Configure Specs <ArrowRight className="w-4 h-4" />
                     </Link>
-                    <span className="text-xs sm:text-sm font-mono font-bold px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded">
+                    <span className="text-xs font-mono font-bold px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded">
                       {product.chemicalResistance}
                     </span>
                   </div>
@@ -195,7 +194,7 @@ export default function ProductsPage() {
           </motion.div>
           {filteredProducts.length === 0 && (
             <div className="text-center py-12 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl">
-              <p className="text-zinc-400 font-mono text-sm sm:text-base font-bold uppercase tracking-wider">No manufacturing assets matched your target coordinates.</p>
+              <p className="text-zinc-400 font-mono text-xs sm:text-base font-bold uppercase tracking-wider">No manufacturing assets matched your target coordinates.</p>
             </div>
           )}
         </div>
@@ -206,11 +205,11 @@ export default function ProductsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center relative z-10">
             
             <div className="lg:col-span-2 space-y-4">
-              <span className="text-sm font-mono font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5">
+              <span className="text-xs font-mono font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5">
                 <Calculator className="w-4 h-4" /> Parametric Quote Simulation
               </span>
               <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Run-Rate Budget Calculator</h2>
-              <p className="text-base sm:text-lg text-zinc-400 leading-relaxed font-medium">
+              <p className="text-sm sm:text-base text-zinc-400 leading-relaxed font-medium">
                 Adjust baseline sheet volumes to preview real-time automated infrastructure routing offsets and dynamic scale balancing.
               </p>
             </div>
@@ -218,11 +217,11 @@ export default function ProductsPage() {
             <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-8 bg-zinc-950 p-6 sm:p-8 rounded-2xl border border-zinc-800">
               <div className="space-y-6 text-base font-medium">
                 <div className="space-y-2">
-                  <label className="text-zinc-400 font-bold uppercase tracking-wider text-xs sm:text-sm">Select Catalog Profile</label>
+                  <label className="text-zinc-400 font-bold uppercase tracking-wider text-xs">Select Catalog Profile</label>
                   <select 
                     value={calcItem} 
                     onChange={(e) => setCalcItem(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 px-3 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono text-zinc-200 text-base"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 px-3 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono text-zinc-200 text-sm"
                   >
                     {productItems.map((item) => (
                       <option key={item.id} value={item.id}>{item.name}</option>
@@ -230,9 +229,9 @@ export default function ProductsPage() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <div className="flex justify-between text-zinc-400 font-bold uppercase tracking-wider text-xs sm:text-sm">
+                  <div className="flex justify-between text-zinc-400 font-bold uppercase tracking-wider text-xs">
                     <label>Impression Volume</label>
-                    <span className="font-mono text-indigo-400 text-base">{calcVolume.toLocaleString()} units</span>
+                    <span className="font-mono text-indigo-400 text-sm">{calcVolume.toLocaleString()} units</span>
                   </div>
                   <input 
                     type="range" min="250" max="25000" step="250"
@@ -240,7 +239,7 @@ export default function ProductsPage() {
                     onChange={(e) => setCalcVolume(Number(e.target.value))}
                     className="w-full accent-indigo-500 bg-zinc-800 rounded-lg appearance-none h-2 cursor-pointer"
                   />
-                  <div className="flex justify-between text-xs sm:text-sm text-zinc-600 font-mono">
+                  <div className="flex justify-between text-xs text-zinc-600 font-mono">
                     <span>250 min</span>
                     <span>25k max</span>
                   </div>
@@ -249,15 +248,15 @@ export default function ProductsPage() {
 
               <div className="bg-zinc-900 border border-zinc-800/80 rounded-xl p-5 flex flex-col justify-between space-y-6 text-base">
                 <div className="space-y-2">
-                  <span className="text-zinc-500 text-xs sm:text-sm font-bold uppercase tracking-widest block">Calculated Fleet Routing</span>
-                  <span className="font-mono text-zinc-200 font-bold bg-zinc-950 px-3 py-2 rounded border border-zinc-800 text-sm sm:text-base block text-center">
+                  <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest block">Calculated Fleet Routing</span>
+                  <span className="font-mono text-zinc-200 font-bold bg-zinc-950 px-3 py-2 rounded border border-zinc-800 text-xs block text-center">
                     {calcVolume >= 5000 ? "High-Speed Industrial Litho Offset" : "Variable Data Electrophotographic Digital"}
                   </span>
                 </div>
                 <div className="space-y-1">
-                  <span className="text-zinc-500 text-xs sm:text-sm font-bold uppercase tracking-widest block">Estimated Cost Frame</span>
-                  <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-emerald-400">${calculatedEstimate}</div>
-                  <span className="text-xs sm:text-sm text-zinc-500 font-medium block pt-0.5">*Excludes localized customs/freight variables</span>
+                  <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest block">Estimated Cost Frame</span>
+                  <div className="text-3xl font-black font-mono tracking-tight text-emerald-400">${calculatedEstimate}</div>
+                  <span className="text-[10px] text-zinc-500 font-medium block pt-0.5">*Excludes localized variables</span>
                 </div>
               </div>
             </div>
@@ -268,11 +267,11 @@ export default function ProductsPage() {
         {/* SECTION 4: DEEP INDUSTRIAL SUBSTRATE INVENTORY */}
         <section className="space-y-6">
           <div className="space-y-2">
-            <span className="text-sm font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+            <span className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
               <Layers className="w-4 h-4" /> Structural Engineering Materials
             </span>
             <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 dark:text-white">Active Substrate Vault</h2>
-            <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 font-medium">
+            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-medium">
               We warehouse and calibrate thousands of distinct material configurations to ensure ink adhesion, environmental durability, and shear threshold values remain consistent.
             </p>
           </div>
@@ -281,13 +280,13 @@ export default function ProductsPage() {
             {SUBSTRATE_LIBRARY.map((sub, i) => (
               <div key={i} className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 rounded-2xl flex flex-col justify-between space-y-4 shadow-sm">
                 <div className="space-y-3">
-                  <h3 className="font-black text-base sm:text-lg tracking-tight text-zinc-900 dark:text-white">{sub.name}</h3>
-                  <div className="space-y-1.5 text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-medium">
+                  <h3 className="font-black text-base tracking-tight text-zinc-900 dark:text-white">{sub.name}</h3>
+                  <div className="space-y-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
                     <p><span className="text-zinc-400 font-bold">Gauge:</span> {sub.gauge}</p>
                     <p><span className="text-zinc-400 font-bold">Primary Core:</span> {sub.application}</p>
                   </div>
                 </div>
-                <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3 text-xs sm:text-sm font-mono font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3 text-[10px] font-mono font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                   {sub.environmental}
                 </div>
               </div>
@@ -301,18 +300,18 @@ export default function ProductsPage() {
             <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 dark:text-white flex items-center gap-2">
               <HelpCircle className="w-6 h-6 text-indigo-600" /> Preflight Engineering FAQ
             </h2>
-            <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 font-medium">
+            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-medium">
               Critical operational reference directives to minimize data drop conflicts and physical calibration delays on the manufacturing floor.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {TECHNICAL_FAQS.map((faq, idx) => (
-              <div key={idx} className="space-y-3 text-base sm:text-lg">
-                <h3 className="font-black text-zinc-900 dark:text-white tracking-tight flex items-start gap-2 leading-snug">
+              <div key={idx} className="space-y-3">
+                <h3 className="font-black text-zinc-900 dark:text-white tracking-tight flex items-start gap-2 leading-snug text-base">
                   <span className="text-indigo-600 font-mono font-black">Q:</span>{faq.q}
                 </h3>
-                <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium pl-4 border-l border-zinc-200 dark:border-zinc-800">
+                <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium pl-4 border-l border-zinc-200 dark:border-zinc-800">
                   {faq.a}
                 </p>
               </div>

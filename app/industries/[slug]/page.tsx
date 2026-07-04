@@ -1,4 +1,3 @@
-// src/app/industries/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { industriesData } from "../../data/siteData";
 import Link from "next/link";
@@ -63,11 +62,14 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white antialiased selection:bg-indigo-600 selection:text-white">
       <Navbar />
 
-      <main className="pt-36 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+      <main className="pt-16 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
         
-        {/* BACK NAVIGATION */}
+        {/* BACK NAVIGATION WITH LINK ARROW INCLUDED */}
         <div>
-          <Link href="/industries" className="inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group">
+          <Link 
+            href="/industries" 
+            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group"
+          >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Sectors
           </Link>
         </div>
@@ -78,12 +80,12 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
           {/* LEFT CONTAINER: DYNAMIC IMAGERY & HARDWARE PROFILE */}
           <div className="lg:col-span-5 space-y-6">
             <ClientAnimationWrapper type="fade-up" delay={0.1}>
-              <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3] rounded-3xl overflow-hidden shadow-lg border border-zinc-200/60 dark:border-zinc-800 bg-white dark:bg-zinc-900 group">
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/50 via-transparent to-transparent z-10 opacity-70" />
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-zinc-200/60 dark:border-zinc-800 bg-white dark:bg-zinc-900 group">
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/40 via-transparent to-transparent z-10 opacity-70" />
                 <img 
                   src={industry.image} 
                   alt={industry.title} 
-                  className="object-cover w-full h-full transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out" 
+                  className="object-cover w-full h-full transform scale-100 group-hover:scale-105 transition-transform duration-700 ease-out" 
                 />
               </div>
             </ClientAnimationWrapper>
@@ -98,12 +100,12 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
                 ].map((stat, i) => {
                   const StatIcon = stat.icon;
                   return (
-                    <div key={i} className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200/60 dark:border-zinc-800 space-y-3 shadow-sm">
+                    <div key={i} className="bg-white dark:bg-zinc-900 p-5 rounded-xl border border-zinc-200/60 dark:border-zinc-800 space-y-3 shadow-sm">
                       <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-inner">
                         <StatIcon className="w-5 h-5" />
                       </div>
                       <div className="space-y-0.5">
-                        <span className="block text-[11px] font-mono font-bold tracking-wider text-zinc-400 uppercase">{stat.label}</span>
+                        <span className="block text-[10px] font-mono font-bold tracking-wider text-zinc-400 uppercase">{stat.label}</span>
                         <span className="block text-sm font-black text-zinc-800 dark:text-zinc-200">{stat.value}</span>
                       </div>
                     </div>
@@ -120,27 +122,27 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-indigo-500/0 via-indigo-500/30 to-indigo-500/0" />
                 
                 <div className="space-y-4">
-                  <span className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-3.5 py-2 rounded-lg flex items-center gap-1.5 w-fit shadow-sm">
+                  <span className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-3 py-1.5 rounded-lg flex items-center gap-1.5 w-fit border border-indigo-100/30 dark:border-indigo-900/40">
                     <Building2 className="w-4 h-4" /> Sector Execution Blueprint
                   </span>
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight">
+                  <h1 className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-white tracking-tight leading-[0.95]">
                     {industry.title} Matrix
                   </h1>
-                  <p className="text-base sm:text-lg lg:text-xl text-indigo-600 dark:text-indigo-400 font-bold tracking-tight leading-relaxed">
+                  <p className="text-base sm:text-lg text-indigo-600 dark:text-indigo-400 font-bold tracking-tight leading-relaxed">
                     {industry.tagline}
                   </p>
-                  <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
+                  <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
                     {industry.description}
                   </p>
                 </div>
 
                 {/* Capabilities Grid */}
                 <div className="border-t border-zinc-100 dark:border-zinc-800/80 pt-6 space-y-4">
-                  <h3 className="text-xs sm:text-sm font-black uppercase tracking-widest text-zinc-400">Sector-Specific Capabilities</h3>
+                  <h3 className="text-xs font-black uppercase tracking-widest text-zinc-400">Sector-Specific Capabilities</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                     {industry.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-3 text-sm sm:text-base font-bold text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                      <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm font-bold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                         <span>{feature}</span>
                       </div>
                     ))}
@@ -149,10 +151,10 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
 
                 {/* Deep Machine Settings parameters list */}
                 <div className="border-t border-zinc-100 dark:border-zinc-800/80 pt-6 space-y-4">
-                  <h3 className="text-xs sm:text-sm font-black uppercase tracking-widest text-zinc-400">Machine Blueprint Controls</h3>
+                  <h3 className="text-xs font-black uppercase tracking-widest text-zinc-400">Machine Blueprint Controls</h3>
                   <div className="space-y-3">
                     {(industry.extendedSpecs || []).map((spec, index) => (
-                      <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-800/60 text-sm sm:text-base gap-2">
+                      <div key={index} className="flex items-center justify-between p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-800/60 text-xs sm:text-sm gap-2">
                         <span className="font-bold text-zinc-500 dark:text-zinc-400">{spec.label}</span>
                         <span className="font-mono font-black text-zinc-800 dark:text-zinc-200">{spec.value}</span>
                       </div>
@@ -164,13 +166,13 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
                 <div className="pt-4 flex flex-col sm:flex-row gap-4">
                   <Link 
                     href="/quote" 
-                    className="flex-1 bg-[rgb(79,70,229)] text-white text-sm font-bold tracking-tight text-center py-4 px-6 rounded-2xl hover:bg-[rgb(67,56,202)] transition-all flex items-center justify-center gap-1.5 shadow-md shadow-indigo-600/10 group"
+                    className="flex-1 bg-indigo-600 border border-indigo-500 text-white text-xs font-black uppercase tracking-widest text-center py-4 px-6 rounded-xl hover:bg-indigo-700 transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-indigo-600/10 group"
                   >
-                    Initialize Production Spec Form <span className="text-base group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+                    Initialize Production Spec Form <span className="text-sm group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
                   </Link>
                   <Link 
                     href="/contact" 
-                    className="sm:w-56 lg:w-52 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm font-bold tracking-tight text-center py-4 px-4 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800/70 transition-all flex items-center justify-center shadow-sm"
+                    className="sm:w-52 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 text-xs font-black uppercase tracking-widest text-center py-4 px-4 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/70 transition-all flex items-center justify-center shadow-sm"
                   >
                     Explore Plant Capabilities
                   </Link>
@@ -179,7 +181,7 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
                 {/* Verified standard token */}
                 <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800/60 flex items-center gap-2 text-zinc-400 dark:text-zinc-500">
                   <ShieldCheck className="w-4 h-4 text-indigo-500" />
-                  <span className="text-xs font-black tracking-wider uppercase font-mono">G7 Master Compliance Ecosystem Verified</span>
+                  <span className="text-[10px] font-black tracking-wider uppercase font-mono">G7 Master Compliance Ecosystem Verified</span>
                 </div>
 
               </div>
@@ -189,23 +191,23 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
 
         {/* SECTION 2: COMPLIANCE TRACKING LOGS BLOCK */}
         <ClientAnimationWrapper type="fade-up" delay={0.2}>
-          <section className="bg-zinc-900 text-white p-8 sm:p-14 rounded-3xl border border-zinc-800 shadow-lg relative overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <section className="bg-zinc-900 border border-zinc-800 text-white p-8 sm:p-12 rounded-3xl shadow-xl relative overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
             
             <div className="lg:col-span-5 space-y-4 relative z-10">
               <div className="w-12 h-12 rounded-xl bg-zinc-800 flex items-center justify-center text-indigo-400 border border-zinc-700 shadow-inner">
-                <Cpu className="w-6 h-6" />
+                <Cpu className="w-5 h-5" />
               </div>
               <h2 className="text-2xl sm:text-3xl font-black tracking-tight">Compliance Tracking Framework</h2>
-              <p className="text-sm sm:text-base text-zinc-400 font-medium leading-relaxed">
+              <p className="text-xs sm:text-sm text-zinc-400 font-medium leading-relaxed">
                 Every customized run processed under this dynamic market matrix inherits total validation logs meeting structural target profiles cleanly.
               </p>
             </div>
 
             <div className="lg:col-span-7 space-y-3 relative z-10">
               {(industry.complianceRequirements || []).map((requirement, idx) => (
-                <div key={idx} className="flex items-center gap-4 bg-zinc-950/50 p-4 rounded-xl border border-zinc-800/80 text-sm font-medium text-zinc-300 leading-relaxed">
-                  <span className="w-2 h-2 rounded-full bg-indigo-500 shrink-0" />
+                <div key={idx} className="flex items-center gap-4 bg-zinc-950/50 p-4 rounded-xl border border-zinc-800/80 text-xs sm:text-sm font-medium text-zinc-300 leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />
                   <span>{requirement}</span>
                 </div>
               ))}
@@ -214,17 +216,17 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
         </ClientAnimationWrapper>
 
         {/* SECTION 3: INTERACTIVE CORPORATE SAMPLE KIT OFFERING */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-8 sm:p-14 rounded-3xl shadow-sm relative overflow-hidden">
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-8 sm:p-12 rounded-3xl shadow-sm relative overflow-hidden">
           <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
           
           <div className="lg:col-span-7 space-y-4">
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-bold tracking-wider uppercase">
               <Sparkles className="w-3.5 h-3.5" /> Tactile Validation
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
+            <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
               Request a Sector Sample Kit
             </h2>
-            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
               Review real physical swatches, finishings, and engineering structures before committing capital. Our bespoke sector kits contain complete texture booklets, custom foil matrices, and weight configurations specific to **{industry.title}**.
             </p>
           </div>
@@ -232,9 +234,9 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
           <div className="lg:col-span-5 w-full sm:w-auto lg:justify-self-end">
             <Link 
               href="/samples" 
-              className="w-full sm:w-fit inline-flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900 border border-zinc-800 text-white text-xs sm:text-sm font-black uppercase tracking-widest px-6 py-3.5 rounded-xl transition-all shadow-md group"
+              className="w-full sm:w-fit inline-flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900 border border-zinc-800 text-white text-xs font-black uppercase tracking-widest px-6 py-3.5 rounded-xl transition-all shadow-md group"
             >
-              <PackageCheck className="w-5 h-5 text-emerald-400" /> Dispatch Free Sample Case <ChevronRight className="w-4 h-4 text-zinc-500 group-hover:translate-x-0.5 transition-transform" />
+              <PackageCheck className="w-4 h-4 text-emerald-400" /> Dispatch Free Sample Case <ChevronRight className="w-4 h-4 text-zinc-500 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
         </section>
@@ -242,7 +244,7 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
         {/* SECTION 4: TECHNICAL AUDIT FAQ ACCORDION SECTION */}
         <section className="space-y-8">
           <div className="space-y-2">
-            <span className="text-xs sm:text-sm font-mono font-black uppercase tracking-widest text-zinc-400 block">Production Intelligence</span>
+            <span className="text-xs font-mono font-black uppercase tracking-widest text-zinc-400 block">Production Intelligence</span>
             <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">Deployment FAQs</h2>
           </div>
 
@@ -250,11 +252,11 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
             {genericFAQs.map((faq, i) => (
               <div key={i} className="bg-white dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/80 p-6 sm:p-8 rounded-2xl space-y-4 relative shadow-inner flex flex-col justify-start">
                 <div className="w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-500 dark:text-zinc-400">
-                  <HelpCircle className="w-5 h-5" />
+                  <HelpCircle className="w-4 h-4" />
                 </div>
                 <div className="space-y-2">
                   <h4 className="font-black text-base sm:text-lg text-zinc-900 dark:text-white tracking-tight leading-snug">{faq.q}</h4>
-                  <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">{faq.a}</p>
+                  <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">{faq.a}</p>
                 </div>
               </div>
             ))}
@@ -264,7 +266,7 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
         {/* SECTION 5: CROSS-SECTOR SUPPORT INJECTIONS */}
         <section className="space-y-6">
           <div className="space-y-2">
-            <span className="text-xs sm:text-sm font-mono font-black uppercase tracking-widest text-zinc-400 block">Cross-Sector Support</span>
+            <span className="text-xs font-mono font-black uppercase tracking-widest text-zinc-400 block">Cross-Sector Support</span>
             <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">Explore Other Industry Configurations</h2>
           </div>
           
@@ -277,11 +279,11 @@ export default function IndustryDetailPage({ params }: { params: { slug: string 
               <div key={item.id} className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 sm:p-8 rounded-2xl flex flex-col justify-between space-y-6 shadow-sm hover:shadow-xl hover:border-indigo-500/20 transition-all duration-300 group">
                 <div className="space-y-3">
                   <h4 className="font-black text-xl text-zinc-900 dark:text-white tracking-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.title}</h4>
-                  <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{item.desc}</p>
+                  <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{item.desc}</p>
                 </div>
                 <div className="flex items-center justify-between border-t border-zinc-100 dark:border-zinc-800/60 pt-4 mt-2">
-                  <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest bg-zinc-100 dark:bg-zinc-800 text-zinc-400 px-2.5 py-1 rounded">ECO AUDITED</span>
-                  <Link href={`/industries/${item.id}`} className="text-xs sm:text-sm font-black uppercase tracking-widest text-zinc-400 flex items-center gap-1 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">
+                  <span className="text-[10px] font-mono font-bold tracking-widest bg-zinc-100 dark:bg-zinc-800 text-zinc-400 px-2.5 py-1 rounded">ECO AUDITED</span>
+                  <Link href={`/industries/${item.id}`} className="text-xs font-black uppercase tracking-widest text-zinc-400 flex items-center gap-1 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">
                     Deploy <ArrowUpRight className="w-4 h-4" />
                   </Link>
                 </div>

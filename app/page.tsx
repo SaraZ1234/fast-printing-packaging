@@ -73,13 +73,13 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <main className="relative bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white pt-20 overflow-x-hidden antialiased">
+    <main className="relative bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white pt-24 overflow-x-hidden antialiased">
       
       {/* Structural Top Scroll Progress Element */}
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-indigo-600 z-[100] origin-left" style={{ scaleX }} />
 
       {/* SECTION 1: ENTERPRISE CINEMATIC HERO */}
-      <section className="relative min-h-[95vh] flex items-center justify-center py-28 overflow-hidden border-b border-zinc-200/60 dark:border-zinc-900">
+      <section className="relative min-h-[90vh] flex items-center justify-center py-20 overflow-hidden border-b border-zinc-200/60 dark:border-zinc-900">
         <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-gradient-to-tr from-indigo-500/10 to-transparent rounded-full blur-3xl animate-pulse pointer-events-none" />
         <div className="absolute bottom-10 right-1/4 w-[700px] h-[700px] bg-gradient-to-bl from-fuchsia-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
@@ -93,15 +93,15 @@ export default function Home() {
               We manufacture <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-fuchsia-500">packaging</span> that scales brands.
             </h1>
 
-            <p className="text-lg sm:text-xl text-zinc-500 dark:text-zinc-400 max-w-3xl mx-auto font-medium leading-relaxed">
+            <p className="text-sm sm:text-base lg:text-lg text-zinc-500 dark:text-zinc-400 max-w-3xl mx-auto font-medium leading-relaxed">
               From automated subscription box dielines to complex corporate paper architecture systems, we synchronize your physical touchpoints seamlessly using strict G7 Master calibration standards.
             </p>
 
             <div className="pt-4 flex flex-col sm:flex-row justify-center items-center gap-4">
-              <Link href="/quote" className="w-full sm:w-auto bg-indigo-600 text-white font-bold px-8 py-4 rounded-xl shadow-2xl shadow-indigo-600/30 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 group text-base">
+              <Link href="/quote" className="w-full sm:w-auto bg-indigo-600 text-white font-bold px-8 py-4 rounded-xl shadow-2xl shadow-indigo-600/30 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 group text-sm sm:text-base">
                 Initialize Production Spec Form <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform" />
               </Link>
-              <Link href="/services" className="w-full sm:w-auto bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white font-bold px-8 py-4 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 shadow-sm transition-all text-base">
+              <Link href="/services" className="w-full sm:w-auto bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white font-bold px-8 py-4 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 shadow-sm transition-all text-sm sm:text-base">
                 Explore Plant Capabilities
               </Link>
             </div>
@@ -110,11 +110,11 @@ export default function Home() {
       </section>
 
       {/* SECTION 2: PRODUCTION CHANNELS / SERVICES */}
-      <section className="py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-zinc-200/60 dark:border-zinc-900">
-        <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
-          <span className="text-sm font-black text-indigo-600 dark:text-indigo-400 tracking-widest uppercase">Manufacturing Infrastructure</span>
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Our Commercial Production Tracks</h2>
-          <p className="text-base text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
+      <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-zinc-200/60 dark:border-zinc-900">
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+          <span className="text-xs font-mono font-black text-indigo-600 dark:text-indigo-400 tracking-widest uppercase">Manufacturing Infrastructure</span>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-zinc-900 dark:text-white">Our Commercial Production Tracks</h2>
+          <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
             Four specialized high-speed production pathways operating concurrently inside our facility to execute demanding modern industrial requirements flawlessly.
           </p>
         </div>
@@ -132,8 +132,8 @@ export default function Home() {
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="font-bold text-xl text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{srv.title}</h3>
-                    <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{srv.desc}</p>
+                    <h3 className="font-bold text-lg sm:text-xl text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{srv.title}</h3>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{srv.desc}</p>
                   </div>
                 </div>
                 <div className="pt-6">
@@ -148,14 +148,14 @@ export default function Home() {
       </section>
 
       {/* SECTION 3: EXPANDED PRODUCT CATALOG CONFIGURATOR */}
-      <section className="py-28 bg-white dark:bg-zinc-900/20 border-b border-zinc-200/60 dark:border-zinc-900">
+      <section className="py-24 bg-white dark:bg-zinc-900/20 border-b border-zinc-200/60 dark:border-zinc-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-4">
             <div className="space-y-2">
-              <span className="text-sm font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Physical Deliverables</span>
-              <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Configurable Brand Essentials</h2>
+              <span className="text-xs font-mono font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Physical Deliverables</span>
+              <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-zinc-900 dark:text-white">Configurable Brand Essentials</h2>
             </div>
-            <Link href="/products" className="inline-flex items-center gap-2 text-base font-bold text-indigo-600 dark:text-indigo-400 hover:opacity-80 transition-opacity group">
+            <Link href="/products" className="inline-flex items-center gap-2 text-sm sm:text-base font-bold text-indigo-600 dark:text-indigo-400 hover:opacity-80 transition-opacity group">
               View Complete Catalog Matrix <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -170,12 +170,12 @@ export default function Home() {
                   <img src={prod.img} alt={prod.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
                 </div>
                 <div className="p-5 space-y-4">
-                  <div className="space-y-1.5">
-                    <span className="text-xs font-black uppercase tracking-widest text-zinc-400">{prod.category}</span>
-                    <h3 className="font-bold text-lg text-zinc-900 dark:text-white tracking-tight">{prod.title}</h3>
+                  <div className="space-y-2">
+                    <span className="text-xs font-mono font-black uppercase tracking-widest text-zinc-400">{prod.category}</span>
+                    <h3 className="font-bold text-base sm:text-lg text-zinc-900 dark:text-white tracking-tight">{prod.title}</h3>
                     <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{prod.detail}</p>
                   </div>
-                  <Link href={`/products/${prod.id}`} className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 p-3 rounded-xl text-center text-sm font-bold text-zinc-800 dark:text-zinc-200 flex items-center justify-center gap-1.5 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 transition-colors">
+                  <Link href={`/products/${prod.id}`} className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 p-3 rounded-xl text-center text-sm font-bold text-zinc-800 dark:text-zinc-200 flex items-center justify-center gap-1.5 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 transition-colors duration-200">
                     Configure Substrates <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -186,14 +186,14 @@ export default function Home() {
       </section>
 
       {/* SECTION 4: REVEALING HEAVY PLANT INVENTORY */}
-      <section className="py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-zinc-200/60 dark:border-zinc-900">
+      <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-zinc-200/60 dark:border-zinc-900">
         <div className="flex flex-col lg:flex-row gap-12 items-start">
           <div className="lg:w-1/3 space-y-4 lg:sticky lg:top-32">
-            <span className="text-sm font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+            <span className="text-xs font-mono font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
               <Settings className="w-4 h-4" /> Heavy Hardware Capital
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">The Plant Machinery Stack</h2>
-            <p className="text-base text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight text-zinc-900 dark:text-white">The Plant Machinery Stack</h2>
+            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
               We own and operate our primary hardware arrays directly. No middle brokers, no outsourced tracking breakdowns—just raw structural performance components.
             </p>
           </div>
@@ -202,12 +202,12 @@ export default function Home() {
             {MACHINERY_INVENTORY.map((mach, i) => (
               <div key={i} className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800 shadow-sm space-y-3">
                 <div className="flex justify-between items-start gap-2">
-                  <h3 className="font-bold text-zinc-900 dark:text-white text-lg tracking-tight">{mach.name}</h3>
-                  <span className="text-xs font-mono font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded text-zinc-500 shrink-0">{mach.origin}</span>
+                  <h3 className="font-bold text-zinc-900 dark:text-white text-base sm:text-lg tracking-tight">{mach.name}</h3>
+                  <span className="text-xs font-mono font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded text-zinc-500 dark:text-zinc-400 shrink-0">{mach.origin}</span>
                 </div>
                 <div className="text-sm sm:text-base space-y-1">
-                  <p className="text-indigo-600 dark:text-indigo-400 font-bold">{mach.line}</p>
-                  <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">{mach.spec}</p>
+                  <p className="text-indigo-600 dark:text-indigo-400 font-bold text-xs font-mono uppercase tracking-wider">{mach.line}</p>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{mach.spec}</p>
                 </div>
               </div>
             ))}
@@ -216,22 +216,24 @@ export default function Home() {
       </section>
 
       {/* SECTION 5: COMPLEX MATERIALS SUBSTRATE MATRIX */}
-      <section className="py-28 bg-zinc-900 text-white border-b border-zinc-800 relative overflow-hidden">
+      <section className="py-24 bg-zinc-900 text-white border-b border-zinc-800 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-2">
-            <span className="text-sm font-mono font-bold uppercase tracking-widest text-indigo-400">Material Inventories</span>
-            <h2 className="text-3xl sm:text-5xl font-black tracking-tight">The Substrate Stock Matrix</h2>
-            <p className="text-base text-zinc-400 font-medium">We warehouse an exhaustive suite of precise base sheets calibrated for extreme press stability.</p>
+          <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+            <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400">Material Inventories</span>
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-white">The Substrate Stock Matrix</h2>
+            <p className="text-sm sm:text-base text-zinc-400 font-medium">We warehouse an exhaustive suite of precise base sheets calibrated for extreme press stability.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {SUBSTRATE_MATRIX.map((sub, idx) => (
               <div key={idx} className="bg-zinc-950/40 border border-zinc-800 p-6 rounded-xl space-y-4 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <h3 className="text-lg font-bold text-zinc-100 tracking-tight">{sub.type}</h3>
+                <div className="space-y-3">
+                  <h3 className="text-base sm:text-lg font-bold text-zinc-100 tracking-tight">{sub.type}</h3>
                   <span className="inline-block text-xs font-mono font-bold bg-indigo-500/10 text-indigo-400 px-2.5 py-1 rounded border border-indigo-500/20">{sub.weight}</span>
                 </div>
-                <p className="text-sm text-zinc-400 leading-relaxed pt-3 border-t border-zinc-800/60"><strong className="text-zinc-300">Optimal Target:</strong> {sub.bestFor}</p>
+                <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed pt-3 border-t border-zinc-800/60">
+                  <strong className="text-zinc-300 font-bold">Optimal Target:</strong> {sub.bestFor}
+                </p>
               </div>
             ))}
           </div>
@@ -239,14 +241,14 @@ export default function Home() {
       </section>
 
       {/* SECTION 6: TARGET SOLUTIONS (INDUSTRIES) SECTOR */}
-      <section className="py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-zinc-200/60 dark:border-zinc-900">
+      <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-zinc-200/60 dark:border-zinc-900">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-start">
           <div className="space-y-4 lg:sticky lg:top-32">
-            <span className="text-sm font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+            <span className="text-xs font-mono font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
               <Building2 className="w-4 h-4" /> Sector Management Mappings
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-none">Industry Solutions</h2>
-            <p className="text-base text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-none text-zinc-900 dark:text-white">Industry Solutions</h2>
+            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
               We translate regulatory parameters directly into production paths. From luxury consumer retail parameters to sterile healthcare security tracks, your products are handled perfectly.
             </p>
             <div className="pt-2">
@@ -258,10 +260,10 @@ export default function Home() {
 
           <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
             {INDUSTRIES.map((ind) => (
-              <div key={ind.id} className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 rounded-2xl shadow-sm flex flex-col justify-between hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors">
+              <div key={ind.id} className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 rounded-2xl shadow-sm flex flex-col justify-between hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors duration-200">
                 <div className="space-y-2">
-                  <h3 className="font-bold text-lg text-zinc-900 dark:text-white tracking-tight">{ind.name}</h3>
-                  <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{ind.desc}</p>
+                  <h3 className="font-bold text-base sm:text-lg text-zinc-900 dark:text-white tracking-tight">{ind.name}</h3>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{ind.desc}</p>
                 </div>
                 <div className="pt-6">
                   <Link href={`/industries/${ind.id}`} className="inline-flex items-center gap-1 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
@@ -275,10 +277,12 @@ export default function Home() {
       </section>
 
       {/* SECTION 7: ENTERPRISE FAQ PROFILE ACCORDION */}
-      <section className="py-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-zinc-200/60 dark:border-zinc-900">
+      <section className="py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-zinc-200/60 dark:border-zinc-900">
         <div className="text-center space-y-2 mb-16">
-          <span className="text-sm font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center justify-center gap-1.5"><HelpCircle className="w-4 h-4" /> Technical Preflight Support</span>
-          <h2 className="text-3xl font-black tracking-tight sm:text-4xl">Frequently Answered Parameters</h2>
+          <span className="text-xs font-mono font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center justify-center gap-1.5">
+            <HelpCircle className="w-4 h-4" /> Technical Preflight Support
+          </span>
+          <h2 className="text-3xl font-black tracking-tight sm:text-4xl text-zinc-900 dark:text-white">Frequently Answered Parameters</h2>
         </div>
 
         <div className="space-y-4">
@@ -286,13 +290,13 @@ export default function Home() {
             <div key={i} className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
               <button 
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full text-left p-5 font-bold text-base sm:text-lg flex justify-between items-center gap-4 text-zinc-900 dark:text-white"
+                className="w-full text-left p-5 font-bold text-sm sm:text-base flex justify-between items-center gap-4 text-zinc-900 dark:text-white transition-colors duration-200 focus:outline-none focus:bg-zinc-50 dark:focus:bg-zinc-800/40"
               >
                 <span>{faq.q}</span>
                 <ChevronRight className={`w-5 h-5 transition-transform shrink-0 ${openFaq === i ? "rotate-90 text-indigo-600" : "text-zinc-400"}`} />
               </button>
               {openFaq === i && (
-                <div className="px-5 pb-5 text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium border-t border-zinc-100 dark:border-zinc-800/60 pt-4">
+                <div className="px-5 pb-5 text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium border-t border-zinc-100 dark:border-zinc-800/60 pt-4">
                   {faq.a}
                 </div>
               )}
@@ -302,27 +306,27 @@ export default function Home() {
       </section>
 
       {/* SECTION 8: LOGISTICS & TRUST BADGE GRID */}
-      <section className="py-20 bg-zinc-100 dark:bg-zinc-900/30">
+      <section className="py-20 bg-zinc-100 dark:bg-zinc-900/30 border-b border-zinc-200/40 dark:border-zinc-900/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0"><Truck className="w-5 h-5" /></div>
             <div>
-              <h4 className="font-bold text-base text-zinc-900 dark:text-white mb-1.5">Freight Integration</h4>
-              <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">LTL freight or localized daily carrier route setups directly handling regional fulfillment tracks seamlessly.</p>
+              <h4 className="font-bold text-sm sm:text-base text-zinc-900 dark:text-white mb-1.5">Freight Integration</h4>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">LTL freight or localized daily carrier route setups directly handling regional fulfillment tracks seamlessly.</p>
             </div>
           </div>
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0"><Scale className="w-5 h-5" /></div>
             <div>
-              <h4 className="font-bold text-base text-zinc-900 dark:text-white mb-1.5">Spectral Tolerances</h4>
-              <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Strict delta-E verification testing metrics ensure exact reproduction fidelity across multiple shifts.</p>
+              <h4 className="font-bold text-sm sm:text-base text-zinc-900 dark:text-white mb-1.5">Spectral Tolerances</h4>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Strict delta-E verification testing metrics ensure exact reproduction fidelity across multiple shifts.</p>
             </div>
           </div>
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0"><Maximize2 className="w-5 h-5" /></div>
             <div>
-              <h4 className="font-bold text-base text-zinc-900 dark:text-white mb-1.5">Variable Scale Options</h4>
-              <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Dynamic job layout optimization allows seamless routing from low-volume digital up to extreme offset runs.</p>
+              <h4 className="font-bold text-sm sm:text-base text-zinc-900 dark:text-white mb-1.5">Variable Scale Options</h4>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Dynamic job layout optimization allows seamless routing from low-volume digital up to extreme offset runs.</p>
             </div>
           </div>
         </div>
@@ -332,12 +336,12 @@ export default function Home() {
       <section className="py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="bg-gradient-to-b from-indigo-600 to-indigo-700 text-white p-12 rounded-3xl shadow-2xl shadow-indigo-600/20 space-y-6 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight max-w-xl mx-auto">Have an intricate, high-volume project ready to build?</h2>
-          <p className="text-base text-indigo-100/80 max-w-2xl mx-auto font-medium leading-relaxed">
+          <h2 className="text-3xl sm:text-4xl font-black tracking-tight max-w-xl mx-auto leading-tight text-white">Have an intricate, high-volume project ready to build?</h2>
+          <p className="text-sm sm:text-base text-indigo-100/80 max-w-2xl mx-auto font-medium leading-relaxed">
             Connect directly with our structural engineering and prepress production specialists to design custom dielines, sample prototypes, or draft high-volume corporate logistics matrices.
           </p>
           <div className="pt-2">
-            <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-zinc-950 font-black px-8 py-4 rounded-xl text-base shadow-xl hover:bg-zinc-50 transition-colors group">
+            <Link href="/contact" className="inline-flex items-center gap-2 bg-white text-zinc-950 font-black px-8 py-4 rounded-xl text-sm sm:text-base shadow-xl hover:bg-zinc-50 transition-colors group duration-200">
               Consult Production Team <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
