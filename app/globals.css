@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-stock text-ink font-body antialiased;
+  }
+  ::selection {
+    @apply bg-magenta text-stock;
+  }
+  :focus-visible {
+    outline: 2px solid #00AEEF;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Reusable corner crop-marks, like a press sheet trim guide */
+  .crop-marks {
+    position: relative;
+  }
+  .crop-marks::before,
+  .crop-marks::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+  }
+  .crop-marks::before {
+    top: -1px;
+    left: -1px;
+    border-top: 1.5px solid currentColor;
+    border-left: 1.5px solid currentColor;
+  }
+  .crop-marks::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 1.5px solid currentColor;
+    border-right: 1.5px solid currentColor;
+  }
+
+  .job-label {
+    @apply font-mono text-[11px] uppercase tracking-[0.2em] text-ink/50;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-ink text-stock px-6 py-3 font-mono text-sm uppercase tracking-[0.15em] transition-colors hover:bg-magenta;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 border border-ink/30 text-ink px-6 py-3 font-mono text-sm uppercase tracking-[0.15em] transition-colors hover:border-ink;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
