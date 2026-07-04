@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { Mail, Phone, Clock, MapPin, ShieldCheck, FileCheck2, Hammer, HelpCircle } from "lucide-react";
 import CmykBar from "@/components/CmykBar";
 import QuoteForm from "@/components/QuoteForm";
@@ -8,7 +8,7 @@ import Navbar from "@/components/Navbar";
 
 export default function ContactPage() {
   // Animation Variant Orchestrators
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -16,7 +16,7 @@ export default function ContactPage() {
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
   };
