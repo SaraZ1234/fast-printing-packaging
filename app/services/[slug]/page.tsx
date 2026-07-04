@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { notFound, useParams } from "next/navigation";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { 
   ArrowLeft, CheckCircle2, Gauge, Minimize2, Layers, ShieldCheck, 
   Cpu, Factory, Printer, Shirt, Maximize, Tags, ShoppingBag, 
@@ -399,12 +399,12 @@ const SERVICES_DATA: Record<string, {
 };
 
 // --- ANIMATION STYLES CONFIGURATION ---
-const containerVariants = {
+const containerVariants: Variants = {  
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.05 } }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
 };
@@ -431,11 +431,11 @@ export default function ServiceSlugPage() {
         
         {/* TOP METRIC NAVIGATION CONTEXT */}
         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200/60 dark:border-zinc-900 pb-6">
-          <Link href="/services" className="inline-flex items-center gap-2 text-xs font-black text-zinc-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group uppercase tracking-widest">
+          <Link href="/services" className="inline-flex items-center gap-2 text-sm font-black text-zinc-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group uppercase tracking-widest">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Plant Infrastructure
           </Link>
-          <div className="flex items-center gap-4 text-xs font-mono font-bold text-zinc-400">
-            <span className="bg-zinc-100 dark:bg-zinc-900 px-3 py-1 rounded-md border border-zinc-200/40 dark:border-zinc-800/40">{data.group}</span>
+          <div className="flex items-center gap-4 text-sm font-mono font-bold text-zinc-400">
+            <span className="bg-zinc-100 dark:bg-zinc-900 px-3 py-1.5 rounded-md border border-zinc-200/40 dark:border-zinc-800/40">{data.group}</span>
             <span className="text-indigo-600 dark:text-indigo-400">ID: {slug}</span>
           </div>
         </motion.div>
@@ -453,16 +453,16 @@ export default function ServiceSlugPage() {
             <motion.h1 variants={itemVariants} className="text-4xl sm:text-6xl font-black tracking-tight leading-[0.95] text-zinc-900 dark:text-white">
               {data.name}
             </motion.h1>
-            <motion.p variants={itemVariants} className="text-lg sm:text-2xl text-indigo-600 dark:text-indigo-400 font-extrabold tracking-tight">
+            <motion.p variants={itemVariants} className="text-xl sm:text-2xl text-indigo-600 dark:text-indigo-400 font-extrabold tracking-tight">
               {data.tagline}
             </motion.p>
-            <motion.p variants={itemVariants} className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed max-w-4xl">
+            <motion.p variants={itemVariants} className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed max-w-4xl">
               {data.longDesc}
             </motion.p>
             
             {/* Plant Machinery Designation Badge */}
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-3.5 rounded-xl text-xs font-medium max-w-xl">
-              <Settings className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 animate-spin-slow" />
+            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-4 rounded-xl text-sm font-medium max-w-xl">
+              <Settings className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0 animate-spin-slow" />
               <span className="text-zinc-700 dark:text-zinc-300">
                 <strong className="text-zinc-900 dark:text-white">Active Plant Allocation:</strong> {data.hardwareStack}
               </span>
@@ -477,26 +477,26 @@ export default function ServiceSlugPage() {
             <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-indigo-500/10 to-transparent rounded-full blur-2xl pointer-events-none" />
             <div className="flex items-center gap-2 border-b border-zinc-800 pb-4">
               <Gauge className="w-4 h-4 text-indigo-400" />
-              <h3 className="text-xs font-black uppercase tracking-widest text-zinc-300">Operational Parameters</h3>
+              <h3 className="text-sm font-black uppercase tracking-widest text-zinc-300">Operational Parameters</h3>
             </div>
             
-            <div className="space-y-4 font-medium text-xs">
+            <div className="space-y-4 font-medium text-xs sm:text-sm">
               {data.specs.map((spec, i) => (
                 <div key={i} className="space-y-1">
-                  <span className="block text-zinc-500 uppercase tracking-widest text-[9px] font-bold">{spec.label}</span>
-                  <span className="font-mono text-zinc-200 text-sm leading-tight block">{spec.value}</span>
+                  <span className="block text-zinc-500 uppercase tracking-widest text-xs font-bold">{spec.label}</span>
+                  <span className="font-mono text-zinc-200 text-sm sm:text-base leading-tight block">{spec.value}</span>
                 </div>
               ))}
             </div>
 
-            <div className="pt-4 border-t border-zinc-800 grid grid-cols-2 gap-3 text-[10px] font-mono text-zinc-400">
-              <div>
-                <span className="block text-zinc-600 font-bold uppercase tracking-wider scale-90 origin-left">Spectral Target</span>
-                <span className="text-emerald-400 font-bold">Passed Target</span>
+            <div className="pt-4 border-t border-zinc-800 grid grid-cols-2 gap-4 text-xs sm:text-sm font-mono text-zinc-400">
+              <div className="space-y-0.5">
+                <span className="block text-zinc-600 font-bold uppercase tracking-wider scale-95 origin-left">Spectral Target</span>
+                <span className="text-emerald-400 font-bold block">Passed Target</span>
               </div>
-              <div>
-                <span className="block text-zinc-600 font-bold uppercase tracking-wider scale-90 origin-left">Certification Track</span>
-                <span className="text-indigo-400 font-bold">Enterprise System</span>
+              <div className="space-y-0.5">
+                <span className="block text-zinc-600 font-bold uppercase tracking-wider scale-95 origin-left">Certification Track</span>
+                <span className="text-indigo-400 font-bold block">Enterprise System</span>
               </div>
             </div>
           </motion.div>
@@ -507,7 +507,7 @@ export default function ServiceSlugPage() {
         {/* CORE CAPABILITIES STAGGER GRID */}
         <section className="space-y-8">
           <div className="space-y-2">
-            <span className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5"><Compass className="w-4 h-4" /> Production Scope Detail</span>
+            <span className="text-sm font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5"><Compass className="w-4 h-4" /> Production Scope Detail</span>
             <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-zinc-900 dark:text-white">Technical Core Capabilities</h2>
           </div>
 
@@ -519,11 +519,11 @@ export default function ServiceSlugPage() {
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 rounded-2xl shadow-sm space-y-3 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
               >
-                <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-xs font-black font-mono">
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-sm font-black font-mono">
                   0{i+1}
                 </div>
-                <h3 className="font-bold text-base tracking-tight text-zinc-900 dark:text-white">{cap.title}</h3>
-                <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">{cap.desc}</p>
+                <h3 className="font-bold text-base sm:text-lg tracking-tight text-zinc-900 dark:text-white">{cap.title}</h3>
+                <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">{cap.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -535,9 +535,9 @@ export default function ServiceSlugPage() {
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 relative z-10">
             <div className="space-y-4 lg:pr-6">
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400">Step-by-Step Production Processing</span>
+              <span className="text-sm font-mono font-bold uppercase tracking-widest text-indigo-400">Step-by-Step Production Processing</span>
               <h2 className="text-2xl sm:text-4xl font-black tracking-tight">The Plant Floor Pipeline</h2>
-              <p className="text-xs sm:text-sm text-zinc-400 font-medium leading-relaxed">
+              <p className="text-sm sm:text-base text-zinc-400 font-medium leading-relaxed">
                 Interact with the workflow steps to track how raw design documents route, verify, transform, and deliver across our internal manufacturing modules.
               </p>
               
@@ -547,14 +547,14 @@ export default function ServiceSlugPage() {
                   <button
                     key={i}
                     onClick={() => setActiveWorkflowStep(i)}
-                    className={`px-4 py-2.5 rounded-xl text-left text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center justify-between border ${
+                    className={`px-4 py-3 rounded-xl text-left text-sm font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center justify-between border ${
                       activeWorkflowStep === i 
                         ? "bg-indigo-600 border-indigo-500 text-white shadow-lg" 
                         : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:text-zinc-300"
                     }`}
                   >
                     <span>Phase {flow.step}</span>
-                    <ChevronRight className={`w-3.5 h-3.5 hidden lg:block transition-transform ${activeWorkflowStep === i ? "translate-x-0.5" : "opacity-0"}`} />
+                    <ChevronRight className={`w-4 h-4 hidden lg:block transition-transform ${activeWorkflowStep === i ? "translate-x-0.5" : "opacity-0"}`} />
                   </button>
                 ))}
               </div>
@@ -572,24 +572,24 @@ export default function ServiceSlugPage() {
                   className="space-y-4"
                 >
                   <div className="flex items-center justify-between border-b border-zinc-800/60 pb-3">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded">
+                    <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded">
                       Current Focus Operations
                     </span>
-                    <span className="text-xs font-black font-mono text-zinc-600">
+                    <span className="text-sm font-black font-mono text-zinc-600">
                       Module Phase {data.productionWorkflow[activeWorkflowStep].step}
                     </span>
                   </div>
                   <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white">
                     {data.productionWorkflow[activeWorkflowStep].phase}
                   </h3>
-                  <p className="text-xs sm:text-sm text-zinc-400 font-medium leading-relaxed">
+                  <p className="text-sm sm:text-base text-zinc-400 font-medium leading-relaxed">
                     {data.productionWorkflow[activeWorkflowStep].details}
                   </p>
                 </motion.div>
               </AnimatePresence>
 
-              <div className="flex items-center gap-1 pt-6 text-[10px] font-mono font-bold uppercase tracking-widest text-zinc-600 mt-auto">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="flex items-center gap-2 pt-6 text-xs sm:text-sm font-mono font-bold uppercase tracking-widest text-zinc-600 mt-auto">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 Live Automated Press System Synchronized
               </div>
             </div>
@@ -599,26 +599,26 @@ export default function ServiceSlugPage() {
         {/* COMPLIANCE CHECKLIST */}
         <motion.section variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-8 sm:p-12 rounded-3xl shadow-sm">
           <div className="space-y-4">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+            <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center">
               <AlertTriangle className="w-5 h-5" />
             </div>
             <h3 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-white">Preflight Validation Checklist</h3>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
+            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
               To minimize production anomalies, incoming design files must strictly meet these alignment thresholds prior to formatting physical lines.
             </p>
           </div>
 
-          <div className="lg:col-span-2 space-y-3 text-xs sm:text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <div className="lg:col-span-2 space-y-3 text-sm sm:text-base font-medium text-zinc-700 dark:text-zinc-300">
             {data.engineeringChecklist.map((item, idx) => (
               <div key={idx} className="flex items-start gap-3 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-900 p-4 rounded-xl">
-                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0 mt-1" />
                 <span className="leading-normal">{item}</span>
               </div>
             ))}
             
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-zinc-100 dark:border-zinc-950 mt-4 text-[11px] text-zinc-400 font-mono w-full">
-              <span className="flex items-center gap-1.5"><Scale className="w-3.5 h-3.5 text-indigo-500" /> Method: {data.calibrations.method}</span>
-              <span className="flex items-center gap-1.5"><FileText className="w-3.5 h-3.5 text-indigo-500" /> Standard: {data.calibrations.standard}</span>
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-zinc-100 dark:border-zinc-950 mt-4 text-xs sm:text-sm text-zinc-400 font-mono w-full">
+              <span className="flex items-center gap-1.5"><Scale className="w-4 h-4 text-indigo-500" /> Method: {data.calibrations.method}</span>
+              <span className="flex items-center gap-1.5"><FileText className="w-4 h-4 text-indigo-500" /> Standard: {data.calibrations.standard}</span>
             </div>
           </div>
         </motion.section>
@@ -627,11 +627,11 @@ export default function ServiceSlugPage() {
         <motion.section variants={itemVariants} className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-8 sm:p-12 rounded-3xl text-center space-y-6 max-w-5xl mx-auto shadow-2xl shadow-indigo-600/10 relative overflow-hidden">
           <div className="absolute inset-0 bg-white/5 opacity-30 mix-blend-overlay pointer-events-none" />
           <h2 className="text-2xl sm:text-4xl font-black tracking-tight max-w-xl mx-auto leading-tight">Ready to map this specific track to your next project?</h2>
-          <p className="text-xs sm:text-sm text-indigo-100 font-medium max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-indigo-100 font-medium max-w-2xl mx-auto leading-relaxed">
             Connect directly with our engineering coordinators. Submit your material profiles, custom dielines, and run matrices to receive an instant mechanical quote layout.
           </p>
           <div className="pt-2">
-            <Link href="/contact" className="inline-flex items-center gap-2 bg-zinc-950 text-white font-black px-8 py-4 rounded-xl shadow-xl hover:bg-zinc-900 transition-colors text-xs uppercase tracking-widest">
+            <Link href="/contact" className="inline-flex items-center gap-2 bg-zinc-950 text-white font-black px-8 py-4 rounded-xl shadow-xl hover:bg-zinc-900 transition-colors text-sm uppercase tracking-widest">
               Initiate Production Ticket <ChevronRight className="w-4 h-4" />
             </Link>
           </div>

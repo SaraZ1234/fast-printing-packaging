@@ -43,14 +43,14 @@ export default function Footer() {
           {/* COLUMN 1: BRAND MANIFEST & SOCIAL MATRIX */}
           <div className="space-y-5">
             <Link href="/" className="inline-flex items-center gap-2 group">
-              <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/10">
-                <Printer className="w-4 h-4" />
+              <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/10 transition-transform duration-300 group-hover:scale-105">
+                <Printer className="w-5 h-5" />
               </div>
-              <span className="font-black text-sm uppercase tracking-wider text-zinc-900 dark:text-white">
+              <span className="font-black text-base uppercase tracking-wider text-zinc-900 dark:text-white">
                 FastPrint<span className="text-indigo-600 dark:text-indigo-400">Pack</span>
               </span>
             </Link>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
               Leading printing and packaging provider. We deliver uncompromised quality, industrial speed, and certified sustainability across every production run.
             </p>
             
@@ -61,9 +61,9 @@ export default function Footer() {
                   key={idx} 
                   href={social.href}
                   aria-label={`Follow us on ${social.name}`}
-                  className="w-8 h-8 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/80 flex items-center justify-center text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-500/30 transition-all shadow-sm"
+                  className="w-9 h-9 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/80 flex items-center justify-center text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-500/30 transition-all shadow-sm hover:scale-105 duration-200"
                 >
-                  <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                     <path d={social.path} />
                   </svg>
                 </a>
@@ -73,40 +73,40 @@ export default function Footer() {
 
           {/* COLUMN 2: SERVICES DESK */}
           <div className="space-y-4">
-            <h4 className="text-[10px] font-mono font-black uppercase tracking-widest text-zinc-400">
+            <h4 className="text-xs font-mono font-black uppercase tracking-widest text-zinc-400">
               Our Services
             </h4>
-            <ul className="space-y-2.5 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Custom Packaging</li>
-              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Offset Press Runs</li>
-              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Digital High-Output</li>
-              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Large Format Displays</li>
+            <ul className="space-y-3 text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-200">Custom Packaging</li>
+              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-200">Offset Press Runs</li>
+              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-200">Digital High-Output</li>
+              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-200">Large Format Displays</li>
             </ul>
             <div className="pt-2">
-              <Link href="/services" className="inline-flex items-center gap-1 text-xs font-black text-indigo-600 dark:text-indigo-400 hover:underline group">
-                View All Services <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" />
+              <Link href="/services" className="inline-flex items-center gap-1.5 text-sm font-black text-indigo-600 dark:text-indigo-400 hover:underline group">
+                View All Services <ArrowRight className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </div>
           </div>
 
           {/* COLUMN 3: QUICK PLATFORM LINKS */}
           <div className="space-y-4">
-            <h4 className="text-[10px] font-mono font-black uppercase tracking-widest text-zinc-400">
+            <h4 className="text-xs font-mono font-black uppercase tracking-widest text-zinc-400">
               Quick Links
             </h4>
-            <ul className="space-y-2.5 text-xs font-semibold">
+            <ul className="space-y-3 text-sm font-semibold">
               <li>
-                <Link href="/products" className="text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                <Link href="/products" className="text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
                   Custom Products
                 </Link>
               </li>
               <li>
-                <Link href="/quote" className="text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                <Link href="/quote" className="text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
                   Request a Quote
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                <Link href="/contact" className="text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
                   Contact Support
                 </Link>
               </li>
@@ -115,38 +115,38 @@ export default function Footer() {
 
           {/* COLUMN 4: DIRECT CONTACT & NEWSLETTER BLOCK */}
           <div className="space-y-4">
-            <h4 className="text-[10px] font-mono font-black uppercase tracking-widest text-zinc-400">
+            <h4 className="text-xs font-mono font-black uppercase tracking-widest text-zinc-400">
               Get In Touch
             </h4>
             
-            <ul className="space-y-3 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              <li className="flex gap-2.5 items-start">
-                <MapPin className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
-                <span className="leading-tight">101 Queen Street, West Toronto ON M5H 2N1, Canada</span>
+            <ul className="space-y-3.5 text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              <li className="flex gap-3 items-start">
+                <MapPin className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+                <span className="leading-relaxed text-zinc-600 dark:text-zinc-300">101 Queen Street, West Toronto ON M5H 2N1, Canada</span>
               </li>
-              <li className="flex gap-2.5 items-center">
-                <Phone className="w-4 h-4 text-indigo-500 shrink-0" />
-                <span className="font-mono font-bold text-zinc-700 dark:text-zinc-300">+1 (604) 239-6141</span>
+              <li className="flex gap-3 items-center">
+                <Phone className="w-5 h-5 text-indigo-500 shrink-0" />
+                <span className="font-mono font-bold text-zinc-700 dark:text-zinc-200">+1 (604) 239-6141</span>
               </li>
-              <li className="flex gap-2.5 items-center">
-                <Mail className="w-4 h-4 text-indigo-500 shrink-0" />
-                <span className="font-mono truncate">hello@fastprintpack.com</span>
+              <li className="flex gap-3 items-center">
+                <Mail className="w-5 h-5 text-indigo-500 shrink-0" />
+                <span className="font-mono truncate text-zinc-700 dark:text-zinc-200">hello@fastprintpack.com</span>
               </li>
             </ul>
 
             <form onSubmit={(e) => e.preventDefault()} className="pt-2">
-              <div className="flex rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-1 focus-within:border-indigo-500/50 transition-colors">
+              <div className="flex rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-1.5 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all duration-300">
                 <input 
                   type="email" 
                   placeholder="Your email address" 
-                  className="bg-transparent px-3 py-2 text-xs w-full focus:outline-none font-medium placeholder-zinc-400 text-zinc-800 dark:text-zinc-100"
+                  className="bg-transparent px-3 py-2 text-sm w-full focus:outline-none font-medium placeholder-zinc-400 text-zinc-800 dark:text-zinc-100"
                 />
                 <button 
                   type="submit" 
                   aria-label="Subscribe"
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 rounded-lg transition-colors flex items-center justify-center shrink-0 shadow-md shadow-indigo-600/10"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 rounded-xl transition-colors flex items-center justify-center shrink-0 shadow-md shadow-indigo-600/10 group"
                 >
-                  <Send className="w-3.5 h-3.5" />
+                  <Send className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                 </button>
               </div>
             </form>
@@ -155,16 +155,16 @@ export default function Footer() {
         </div>
 
         {/* BOTTOM METRICS BAR */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-medium text-zinc-400">
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" /> Mon-Sat: 10:00 AM - 8:00 PM
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-6 text-sm font-medium text-zinc-400">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-6 gap-y-2">
+            <span className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" /> Mon-Sat: 10:00 AM - 8:00 PM
             </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-rose-500" /> Sunday: Closed
+            <span className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Sunday: Closed
             </span>
           </div>
-          <p className="font-mono text-[11px] text-center sm:text-right">
+          <p className="font-mono text-xs text-center sm:text-right text-zinc-400/80">
             &copy; {currentYear} Fast Print Pack. All operational runs preserved under system registry.
           </p>
         </div>
