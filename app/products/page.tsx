@@ -1,9 +1,9 @@
 "use client";
-import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo, useId } from "react";
+import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 import Link from "next/link";
-import { 
-  ArrowRight, Sparkles, Layers, Search, Calculator, HelpCircle
+import {
+  ArrowRight, Sparkles, Layers, Search, Calculator, HelpCircle, X
 } from "lucide-react";
 
 // --- EXPANDED INDUSTRIAL DATA MATRIX ---
@@ -37,54 +37,81 @@ const SUBSTRATE_LIBRARY = [
   { name: "Coated One-Side (C1S) Litho Liner", gauge: "80lb - 100lb Cover Stock", application: "High-Gloss Corrugated Box Outer Wraps", environmental: "Sustainably Managed Forest Sourced" }
 ];
 
-const containerVariants = {
+const BASELINE_RATES: Record<string, number> = {
+  "business-cards": 0.18, "letterheads": 0.09, "envelopes": 0.12,
+  "marketing-brochures": 0.35, "marketing-flyers": 0.07, "large-format-posters": 4.50,
+  "large-format-banners": 12.00, "custom-boxes": 1.45, "stickers-labels": 0.04,
+  "shopping-bags": 1.10, "wedding-cards": 2.25, "custom-calendars": 3.40
+};
+
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.04 } }
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
+};
+
+const REVEAL: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }
 };
 
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Systems");
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const prefersReducedMotion = useReducedMotion();
+  const searchId = useId();
+  const calcSelectId = useId();
+  const calcRangeId = useId();
+
   // Dynamic Quote Estimator Variables
   const [calcItem, setCalcItem] = useState("business-cards");
   const [calcVolume, setCalcVolume] = useState(1000);
 
   // Advanced Multi-Stage Filtering (Category + Live Text Search)
   const filteredProducts = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
     return productItems.filter(item => {
       const matchesCategory = selectedCategory === "All Systems" || item.category === selectedCategory;
-      const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            item.assetKey.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = !q ||
+        item.name.toLowerCase().includes(q) ||
+        item.desc.toLowerCase().includes(q) ||
+        item.assetKey.toLowerCase().includes(q);
       return matchesCategory && matchesSearch;
     });
   }, [selectedCategory, searchQuery]);
 
   // Algorithmic Mock Price Calculation Component
   const calculatedEstimate = useMemo(() => {
-    const baselineRates: Record<string, number> = {
-      "business-cards": 0.18, "letterheads": 0.09, "envelopes": 0.12, 
-      "marketing-brochures": 0.35, "marketing-flyers": 0.07, "large-format-posters": 4.50,
-      "large-format-banners": 12.00, "custom-boxes": 1.45, "stickers-labels": 0.04,
-      "shopping-bags": 1.10, "wedding-cards": 2.25, "custom-calendars": 3.40
-    };
-    const rate = baselineRates[calcItem] || 0.10;
+    const rate = BASELINE_RATES[calcItem] || 0.10;
     const volumeFactor = calcVolume > 5000 ? 0.65 : calcVolume > 2500 ? 0.80 : calcVolume > 1000 ? 0.90 : 1.0;
     return (calcVolume * rate * volumeFactor).toFixed(2);
   }, [calcItem, calcVolume]);
 
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("All Systems");
+  };
+
+  // Reveal props: instant + visible for reduced-motion users, scroll-triggered otherwise.
+  const revealProps = prefersReducedMotion
+    ? { initial: "visible" as const, animate: "visible" as const }
+    : { initial: "hidden" as const, whileInView: "visible" as const, viewport: { once: true, margin: "-80px" } };
+
   return (
     <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white pt-24 pb-24 antialiased selection:bg-indigo-600 selection:text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
-        
+
         {/* SECTION 1: MASTER COMMAND HERO */}
-        <div className="text-center max-w-4xl mx-auto space-y-6">
+        <motion.div
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-4xl mx-auto space-y-6"
+        >
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 text-xs font-black tracking-widest uppercase">
             <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" /> Enterprise Fleet Deployment
           </span>
@@ -96,29 +123,47 @@ export default function ProductsPage() {
           </p>
 
           {/* Realtime Multifunctional Search Bar */}
-          <div className="max-w-xl mx-auto relative pt-4">
-            <Search className="w-5 h-5 text-zinc-400 absolute left-4 top-8" />
-            <input 
-              type="text" 
-              placeholder="Search across asset signatures, machines, names, or categories..." 
+          <div className="max-w-xl mx-auto relative pt-4 text-left">
+            <label htmlFor={searchId} className="sr-only">Search products by name, description, or asset code</label>
+            <Search className="w-5 h-5 text-zinc-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" />
+            <input
+              id={searchId}
+              type="text"
+              placeholder="Search across asset signatures, machines, names, or categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl py-3.5 pl-12 pr-4 text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow shadow-sm text-zinc-900 dark:text-white"
+              className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl py-3.5 pl-12 pr-11 text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow shadow-sm text-zinc-900 dark:text-white"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
-        </div>
+        </motion.div>
 
         {/* SECTION 2: INTERACTIVE CATEGORY DIRECTORY */}
         <div className="space-y-6">
-          <div className="flex flex-wrap items-center justify-center gap-2 border-b border-zinc-200/60 dark:border-zinc-900 pb-6 max-w-5xl mx-auto">
+          <div
+            role="group"
+            aria-label="Filter products by category"
+            className="flex flex-wrap items-center justify-center gap-2 border-b border-zinc-200/60 dark:border-zinc-900 pb-6 max-w-5xl mx-auto"
+          >
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
+                type="button"
+                aria-pressed={selectedCategory === cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all duration-200 border ${
+                className={`px-4 py-2.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all duration-200 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 dark:focus-visible:ring-offset-zinc-950 ${
                   selectedCategory === cat
                     ? "bg-indigo-600 border-indigo-500 text-white shadow-lg scale-105"
-                    : "bg-white dark:bg-zinc-900 border-zinc-200/60 dark:border-zinc-800 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
+                    : "bg-white dark:bg-zinc-900 border-zinc-200/60 dark:border-zinc-800 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 hover:border-zinc-300 dark:hover:border-zinc-700"
                 }`}
               >
                 {cat}
@@ -126,9 +171,14 @@ export default function ProductsPage() {
             ))}
           </div>
 
+          {/* Live result count for context + screen readers */}
+          <p aria-live="polite" className="text-center text-[11px] font-mono font-bold uppercase tracking-widest text-zinc-400">
+            Showing {filteredProducts.length} of {productItems.length} catalog assets
+          </p>
+
           {/* COMPACT CARD INVENTORY MATRIX */}
-          <motion.div 
-            layout
+          <motion.div
+            layout={!prefersReducedMotion}
             variants={containerVariants}
             initial="hidden"
             animate="show"
@@ -137,11 +187,11 @@ export default function ProductsPage() {
             <AnimatePresence mode="popLayout">
               {filteredProducts.map((product) => (
                 <motion.div
-                  layout
+                  layout={!prefersReducedMotion}
                   key={product.id}
                   variants={cardVariants}
-                  whileHover={{ y: -6, transition: { duration: 0.15 } }}
-                  className="group bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800 flex flex-col justify-between shadow-sm hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                  whileHover={prefersReducedMotion ? undefined : { y: -6, transition: { duration: 0.15 } }}
+                  className="group bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800 flex flex-col justify-between shadow-sm hover:shadow-2xl hover:border-indigo-300 dark:hover:border-indigo-800/60 transition-all duration-300 relative overflow-hidden"
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800/60 pb-3 text-sm">
@@ -178,9 +228,9 @@ export default function ProductsPage() {
                   </div>
 
                   <div className="pt-6 flex flex-row items-center justify-between mt-4 border-t border-zinc-100 dark:border-zinc-800/40">
-                    <Link 
-                      href={`/services/${product.id}`}
-                      className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 transition-all group-hover:gap-3"
+                    <Link
+                      href={`/products/${product.id}`}
+                      className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 transition-all group-hover:gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-zinc-900"
                     >
                       Configure Specs <ArrowRight className="w-4 h-4" />
                     </Link>
@@ -193,17 +243,24 @@ export default function ProductsPage() {
             </AnimatePresence>
           </motion.div>
           {filteredProducts.length === 0 && (
-            <div className="text-center py-12 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl">
+            <div className="text-center py-12 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl space-y-4">
               <p className="text-zinc-400 font-mono text-xs sm:text-base font-bold uppercase tracking-wider">No manufacturing assets matched your target coordinates.</p>
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-sm px-1"
+              >
+                Clear filters
+              </button>
             </div>
           )}
         </div>
 
         {/* SECTION 3: LIVE PLANT RUN-RATE ESTIMATOR MOCK */}
-        <section className="bg-zinc-900 text-white p-8 sm:p-12 rounded-3xl border border-zinc-800 shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+        <motion.section {...revealProps} variants={REVEAL} className="bg-zinc-900 text-white p-8 sm:p-12 rounded-3xl border border-zinc-800 shadow-xl relative overflow-hidden">
+          <div aria-hidden="true" className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center relative z-10">
-            
+
             <div className="lg:col-span-2 space-y-4">
               <span className="text-xs font-mono font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1.5">
                 <Calculator className="w-4 h-4" /> Parametric Quote Simulation
@@ -217,11 +274,12 @@ export default function ProductsPage() {
             <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-8 bg-zinc-950 p-6 sm:p-8 rounded-2xl border border-zinc-800">
               <div className="space-y-6 text-base font-medium">
                 <div className="space-y-2">
-                  <label className="text-zinc-400 font-bold uppercase tracking-wider text-xs">Select Catalog Profile</label>
-                  <select 
-                    value={calcItem} 
+                  <label htmlFor={calcSelectId} className="text-zinc-400 font-bold uppercase tracking-wider text-xs block">Select Catalog Profile</label>
+                  <select
+                    id={calcSelectId}
+                    value={calcItem}
                     onChange={(e) => setCalcItem(e.target.value)}
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 px-3 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono text-zinc-200 text-sm"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-3 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-zinc-200 text-sm"
                   >
                     {productItems.map((item) => (
                       <option key={item.id} value={item.id}>{item.name}</option>
@@ -230,14 +288,16 @@ export default function ProductsPage() {
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-zinc-400 font-bold uppercase tracking-wider text-xs">
-                    <label>Impression Volume</label>
+                    <label htmlFor={calcRangeId}>Impression Volume</label>
                     <span className="font-mono text-indigo-400 text-sm">{calcVolume.toLocaleString()} units</span>
                   </div>
-                  <input 
+                  <input
+                    id={calcRangeId}
                     type="range" min="250" max="25000" step="250"
                     value={calcVolume}
                     onChange={(e) => setCalcVolume(Number(e.target.value))}
-                    className="w-full accent-indigo-500 bg-zinc-800 rounded-lg appearance-none h-2 cursor-pointer"
+                    aria-valuetext={`${calcVolume.toLocaleString()} units`}
+                    className="w-full accent-indigo-500 bg-zinc-800 rounded-lg appearance-none h-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
                   />
                   <div className="flex justify-between text-xs text-zinc-600 font-mono">
                     <span>250 min</span>
@@ -253,7 +313,7 @@ export default function ProductsPage() {
                     {calcVolume >= 5000 ? "High-Speed Industrial Litho Offset" : "Variable Data Electrophotographic Digital"}
                   </span>
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1" aria-live="polite">
                   <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest block">Estimated Cost Frame</span>
                   <div className="text-3xl font-black font-mono tracking-tight text-emerald-400">${calculatedEstimate}</div>
                   <span className="text-[10px] text-zinc-500 font-medium block pt-0.5">*Excludes localized variables</span>
@@ -262,10 +322,10 @@ export default function ProductsPage() {
             </div>
 
           </div>
-        </section>
+        </motion.section>
 
         {/* SECTION 4: DEEP INDUSTRIAL SUBSTRATE INVENTORY */}
-        <section className="space-y-6">
+        <motion.section {...revealProps} variants={REVEAL} className="space-y-6">
           <div className="space-y-2">
             <span className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
               <Layers className="w-4 h-4" /> Structural Engineering Materials
@@ -278,7 +338,12 @@ export default function ProductsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {SUBSTRATE_LIBRARY.map((sub, i) => (
-              <div key={i} className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 rounded-2xl flex flex-col justify-between space-y-4 shadow-sm">
+              <motion.div
+                key={i}
+                whileHover={prefersReducedMotion ? undefined : { y: -3 }}
+                transition={{ duration: 0.15 }}
+                className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 rounded-2xl flex flex-col justify-between space-y-4 shadow-sm hover:border-indigo-300 dark:hover:border-indigo-800/60 hover:shadow-md transition-[border-color,box-shadow]"
+              >
                 <div className="space-y-3">
                   <h3 className="font-black text-base tracking-tight text-zinc-900 dark:text-white">{sub.name}</h3>
                   <div className="space-y-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
@@ -289,13 +354,13 @@ export default function ProductsPage() {
                 <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3 text-[10px] font-mono font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                   {sub.environmental}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* SECTION 5: TECHNICAL DEPLOYMENT FAQ */}
-        <section className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-8 sm:p-12 rounded-3xl shadow-sm space-y-8">
+        <motion.section {...revealProps} variants={REVEAL} className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-8 sm:p-12 rounded-3xl shadow-sm space-y-8">
           <div className="space-y-2 max-w-2xl">
             <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 dark:text-white flex items-center gap-2">
               <HelpCircle className="w-6 h-6 text-indigo-600" /> Preflight Engineering FAQ
@@ -317,7 +382,7 @@ export default function ProductsPage() {
               </div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
       </div>
     </main>

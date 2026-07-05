@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { 
   Printer, Mail, Phone, MapPin, ArrowRight, Send
@@ -7,6 +7,25 @@ import {
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const footerRef = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+
+  useEffect(() => {
+    const el = footerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   // Pure SVG Path maps to eliminate dependency-breaking version issues with third-party social icons
   const socialIcons = [
@@ -32,18 +51,73 @@ export default function Footer() {
     }
   ];
 
+  const services = ["Custom Packaging", "Offset Press Runs", "Digital High-Output", "Large Format Displays"];
+  const quickLinks = [
+    { href: "/products", label: "Custom Products" },
+    { href: "/quote", label: "Request a Quote" },
+    { href: "/contact", label: "Contact Support" },
+  ];
+
   return (
-    <footer className="bg-white dark:bg-zinc-950 border-t border-zinc-200/80 dark:border-zinc-900/60 pt-16 pb-12 text-zinc-900 dark:text-white antialiased relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-500 via-magenta-500 to-yellow-400 opacity-70" />
+    <footer ref={footerRef} className="bg-white dark:bg-zinc-950 border-t border-zinc-200/80 dark:border-zinc-900/60 pt-16 pb-12 text-zinc-900 dark:text-white antialiased relative overflow-hidden">
+      <style>{`
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(18px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes gradientShift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        @keyframes popCheck {
+          0% { transform: scale(0.6); opacity: 0; }
+          60% { transform: scale(1.15); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        .footer-fade-up { opacity: 0; animation: fadeSlideUp 0.7s cubic-bezier(0.16,1,0.3,1) forwards; }
+        .footer-top-bar { background-size: 200% 100%; animation: gradientShift 6s ease infinite; }
+        .footer-link-underline { position: relative; }
+        .footer-link-underline::after {
+          content: '';
+          position: absolute;
+          left: 0; right: 100%; bottom: -2px;
+          height: 1px;
+          background: currentColor;
+          transition: right 0.3s cubic-bezier(0.65,0,0.35,1);
+        }
+        .footer-link-underline:hover::after { right: 0; }
+        .btn-shine { position: relative; overflow: hidden; isolation: isolate; }
+        .btn-shine::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0;
+          width: 40%; height: 100%;
+          background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+          transform: translateX(-150%) skewX(-20deg);
+          pointer-events: none;
+        }
+        .btn-shine:hover::after { animation: shine 0.85s ease forwards; }
+        @keyframes shine {
+          0% { transform: translateX(-150%) skewX(-20deg); }
+          100% { transform: translateX(250%) skewX(-20deg); }
+        }
+        .pop-check { animation: popCheck 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+        @media (prefers-reduced-motion: reduce) {
+          .footer-fade-up { opacity: 1; animation: none !important; }
+          .footer-top-bar, .btn-shine::after, .pop-check { animation: none !important; }
+        }
+      `}</style>
+
+      <div className="footer-top-bar absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-500 via-magenta-500 to-yellow-400 opacity-70" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-zinc-100 dark:border-zinc-900">
           
           {/* COLUMN 1: BRAND MANIFEST & SOCIAL MATRIX */}
-          <div className="space-y-5">
+          <div className={`space-y-5 ${visible ? "footer-fade-up" : "opacity-0"}`} style={{ animationDelay: "0ms" }}>
             <Link href="/" className="inline-flex items-center gap-2 group">
-              <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/10 transition-transform duration-300 group-hover:scale-105">
+              <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/10 transition-transform duration-300 group-hover:scale-105 group-hover:rotate-[-6deg]">
                 <Printer className="w-5 h-5" />
               </div>
               <span className="font-black text-base uppercase tracking-wider text-zinc-900 dark:text-white">
@@ -61,7 +135,7 @@ export default function Footer() {
                   key={idx} 
                   href={social.href}
                   aria-label={`Follow us on ${social.name}`}
-                  className="w-9 h-9 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/80 flex items-center justify-center text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-500/30 transition-all shadow-sm hover:scale-105 duration-200"
+                  className="w-9 h-9 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/80 flex items-center justify-center text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-500/30 transition-all shadow-sm hover:scale-110 hover:-translate-y-0.5 duration-200"
                 >
                   <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                     <path d={social.path} />
@@ -72,15 +146,16 @@ export default function Footer() {
           </div>
 
           {/* COLUMN 2: SERVICES DESK */}
-          <div className="space-y-4">
+          <div className={`space-y-4 ${visible ? "footer-fade-up" : "opacity-0"}`} style={{ animationDelay: "80ms" }}>
             <h4 className="text-xs font-mono font-black uppercase tracking-widest text-zinc-400">
               Our Services
             </h4>
             <ul className="space-y-3 text-sm font-semibold text-zinc-500 dark:text-zinc-400">
-              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-200">Custom Packaging</li>
-              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-200">Offset Press Runs</li>
-              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-200">Digital High-Output</li>
-              <li className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-200">Large Format Displays</li>
+              {services.map((service, idx) => (
+                <li key={idx} className="footer-link-underline w-fit hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-200">
+                  {service}
+                </li>
+              ))}
             </ul>
             <div className="pt-2">
               <Link href="/services" className="inline-flex items-center gap-1.5 text-sm font-black text-indigo-600 dark:text-indigo-400 hover:underline group">
@@ -90,72 +165,74 @@ export default function Footer() {
           </div>
 
           {/* COLUMN 3: QUICK PLATFORM LINKS */}
-          <div className="space-y-4">
+          <div className={`space-y-4 ${visible ? "footer-fade-up" : "opacity-0"}`} style={{ animationDelay: "150ms" }}>
             <h4 className="text-xs font-mono font-black uppercase tracking-widest text-zinc-400">
               Quick Links
             </h4>
             <ul className="space-y-3 text-sm font-semibold">
-              <li>
-                <Link href="/products" className="text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
-                  Custom Products
-                </Link>
-              </li>
-              <li>
-                <Link href="/quote" className="text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
-                  Request a Quote
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
-                  Contact Support
-                </Link>
-              </li>
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="footer-link-underline w-fit inline-block text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* COLUMN 4: DIRECT CONTACT & NEWSLETTER BLOCK */}
-          <div className="space-y-4">
+          <div className={`space-y-4 ${visible ? "footer-fade-up" : "opacity-0"}`} style={{ animationDelay: "220ms" }}>
             <h4 className="text-xs font-mono font-black uppercase tracking-widest text-zinc-400">
               Get In Touch
             </h4>
             
             <ul className="space-y-3.5 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-              <li className="flex gap-3 items-start">
-                <MapPin className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+              <li className="flex gap-3 items-start group">
+                <MapPin className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-110" />
                 <span className="leading-relaxed text-zinc-600 dark:text-zinc-300">101 Queen Street, West Toronto ON M5H 2N1, Canada</span>
               </li>
-              <li className="flex gap-3 items-center">
-                <Phone className="w-5 h-5 text-indigo-500 shrink-0" />
+              <li className="flex gap-3 items-center group">
+                <Phone className="w-5 h-5 text-indigo-500 shrink-0 transition-transform duration-300 group-hover:scale-110" />
                 <span className="font-mono font-bold text-zinc-700 dark:text-zinc-200">+1 (604) 239-6141</span>
               </li>
-              <li className="flex gap-3 items-center">
-                <Mail className="w-5 h-5 text-indigo-500 shrink-0" />
+              <li className="flex gap-3 items-center group">
+                <Mail className="w-5 h-5 text-indigo-500 shrink-0 transition-transform duration-300 group-hover:scale-110" />
                 <span className="font-mono truncate text-zinc-700 dark:text-zinc-200">hello@fastprintpack.com</span>
               </li>
             </ul>
 
-            <form onSubmit={(e) => e.preventDefault()} className="pt-2">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setSubscribed(true);
+              }}
+              className="pt-2"
+            >
               <div className="flex rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-1.5 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all duration-300">
                 <input 
                   type="email" 
+                  required
                   placeholder="Your email address" 
                   className="bg-transparent px-3 py-2 text-sm w-full focus:outline-none font-medium placeholder-zinc-400 text-zinc-800 dark:text-zinc-100"
                 />
                 <button 
                   type="submit" 
                   aria-label="Subscribe"
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 rounded-xl transition-colors flex items-center justify-center shrink-0 shadow-md shadow-indigo-600/10 group"
+                  className="btn-shine bg-indigo-600 hover:bg-indigo-700 text-white px-4 rounded-xl transition-all duration-300 flex items-center justify-center shrink-0 shadow-md shadow-indigo-600/10 group hover:-translate-y-0.5"
                 >
                   <Send className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                 </button>
               </div>
+              <p className={`text-xs font-semibold text-emerald-600 dark:text-emerald-400 pt-2 flex items-center gap-1.5 transition-all duration-300 ${subscribed ? "opacity-100 max-h-6" : "opacity-0 max-h-0 overflow-hidden"}`}>
+                <span className="pop-check">✓</span> Thanks — you're on the list.
+              </p>
             </form>
           </div>
 
         </div>
 
         {/* BOTTOM METRICS BAR */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-6 text-sm font-medium text-zinc-400">
+        <div className={`flex flex-col sm:flex-row justify-between items-center gap-6 text-sm font-medium text-zinc-400 ${visible ? "footer-fade-up" : "opacity-0"}`} style={{ animationDelay: "300ms" }}>
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-6 gap-y-2">
             <span className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" /> Mon-Sat: 10:00 AM - 8:00 PM

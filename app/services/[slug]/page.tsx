@@ -1,10 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { notFound, useParams } from "next/navigation";
 import Link from "next/link";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
-import { 
-  ArrowLeft, CheckCircle2, Gauge, Factory, Printer, Shirt, 
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  type Variants,
+} from "framer-motion";
+import {
+  ArrowLeft, CheckCircle2, Gauge, Factory, Printer, Shirt,
   Settings, ChevronRight, Compass, FileText, AlertTriangle,
   Scale, Box, Bookmark, ShoppingBag, Layers, FileCheck, Eye, Sparkles
 } from "lucide-react";
@@ -397,39 +404,95 @@ const SERVICES_DATA: Record<string, {
   }
 };
 
-// Animation Configurations
-const CONTAINER_VARIANTS: Variants = {  
+// --- Animation configurations (respect prefers-reduced-motion at call sites) ---
+const HERO_CONTAINER: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.02 } }
+  visible: { opacity: 1, transition: { staggerChildren: 0.09, delayChildren: 0.03 } }
 };
 
-const ITEM_VARIANTS: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 18 } }
+const ITEM_UP: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 20 } }
+};
+
+const REVEAL: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }
+};
+
+const REVEAL_STAGGER: Variants = {
+  hidden: { opacity: 1 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.07 } }
 };
 
 export default function ServiceSlugPage() {
   const params = useParams();
   const slug = params?.slug as string;
   const [activeWorkflowStep, setActiveWorkflowStep] = useState<number>(0);
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const prefersReducedMotion = useReducedMotion();
+
+  // Top scroll-progress indicator
+  const { scrollYProgress } = useScroll();
+  const progressWidth = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
 
   const data = SERVICES_DATA[slug];
   if (!data) return notFound();
 
   const IconComponent = data.icon;
+  const stepCount = data.productionWorkflow.length;
+
+  const focusTab = useCallback((index: number) => {
+    const el = tabRefs.current[index];
+    el?.focus();
+    setActiveWorkflowStep(index);
+  }, []);
+
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+      e.preventDefault();
+      focusTab((index + 1) % stepCount);
+    } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+      e.preventDefault();
+      focusTab((index - 1 + stepCount) % stepCount);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      focusTab(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      focusTab(stepCount - 1);
+    }
+  };
+
+  // Motion is disabled/simplified for users who prefer reduced motion.
+  const heroInitial = prefersReducedMotion ? "visible" : "hidden";
+  const revealProps = prefersReducedMotion
+    ? { initial: "visible", animate: "visible" as const }
+    : { initial: "hidden", whileInView: "visible" as const, viewport: { once: true, margin: "-80px" } };
 
   return (
     <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white pt-16 pb-20 overflow-x-hidden antialiased">
-      <motion.div 
-        variants={CONTAINER_VARIANTS}
-        initial="hidden"
+
+      {/* SCROLL PROGRESS INDICATOR */}
+      <motion.div
+        aria-hidden="true"
+        style={{ scaleX: progressWidth }}
+        className="fixed top-0 left-0 right-0 h-[3px] origin-left bg-gradient-to-r from-indigo-500 to-indigo-600 z-50"
+      />
+
+      <motion.div
+        variants={HERO_CONTAINER}
+        initial={heroInitial}
         animate="visible"
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16"
       >
-        
+
         {/* TOP METRIC NAVIGATION CONTEXT */}
-        <motion.div variants={ITEM_VARIANTS} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200/60 dark:border-zinc-900 pb-5 pt-4">
-          <Link href="/services" className="inline-flex items-center gap-2 text-xs font-mono font-black text-zinc-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group uppercase tracking-widest">
+        <motion.div variants={ITEM_UP} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200/60 dark:border-zinc-900 pb-5 pt-4">
+          <Link
+            href="/services"
+            className="inline-flex items-center gap-2 text-xs font-mono font-black text-zinc-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group uppercase tracking-widest rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 dark:focus-visible:ring-offset-zinc-950"
+          >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Plant Infrastructure
           </Link>
           <div className="flex items-center gap-4 text-xs font-mono font-bold text-zinc-400">
@@ -441,34 +504,36 @@ export default function ServiceSlugPage() {
         {/* INDUSTRIAL HEADER HERO */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
           <div className="lg:col-span-2 space-y-5">
-            <motion.div 
-              variants={ITEM_VARIANTS}
-              whileHover={{ scale: 1.03 }}
-              className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-600/10"
+            <motion.div
+              variants={ITEM_UP}
+              whileHover={prefersReducedMotion ? undefined : { scale: 1.06, rotate: -2 }}
+              whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-600/20"
             >
               <IconComponent className="w-6 h-6" />
             </motion.div>
-            <motion.h1 
-              variants={ITEM_VARIANTS} 
+            <motion.h1
+              variants={ITEM_UP}
               className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[0.95] text-zinc-900 dark:text-white"
             >
               {data.name}
             </motion.h1>
-            <motion.p 
-              variants={ITEM_VARIANTS} 
+            <motion.p
+              variants={ITEM_UP}
               className="text-lg sm:text-xl lg:text-2xl text-indigo-600 dark:text-indigo-400 font-extrabold tracking-tight"
             >
               {data.tagline}
             </motion.p>
-            <motion.p 
-              variants={ITEM_VARIANTS} 
+            <motion.p
+              variants={ITEM_UP}
               className="text-sm sm:text-base lg:text-lg text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed max-w-4xl"
             >
               {data.longDesc}
             </motion.p>
-            
+
             {/* Plant Machinery Designation Badge */}
-            <motion.div variants={ITEM_VARIANTS} className="inline-flex items-center gap-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-4 rounded-xl text-xs sm:text-sm font-medium max-w-xl">
+            <motion.div variants={ITEM_UP} className="inline-flex items-center gap-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-4 rounded-xl text-xs sm:text-sm font-medium max-w-xl">
               <Settings className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
               <span className="text-zinc-700 dark:text-zinc-300">
                 <strong className="text-zinc-900 dark:text-white">Active Plant Allocation:</strong> {data.hardwareStack}
@@ -476,17 +541,22 @@ export default function ServiceSlugPage() {
             </motion.div>
           </div>
 
-          {/* SIDEBAR: OPERATIONAL BLUEPRINT */}
-          <motion.div 
-            variants={ITEM_VARIANTS}
-            className="w-full bg-zinc-900 text-white p-6 rounded-2xl border border-zinc-800 space-y-6 relative overflow-hidden shadow-xl"
+          {/* SIDEBAR: OPERATIONAL BLUEPRINT (sticky on desktop while scrolling the detail) */}
+          <motion.div
+            variants={ITEM_UP}
+            className="w-full bg-zinc-900 text-white p-6 rounded-2xl border border-zinc-800 space-y-6 relative overflow-hidden shadow-xl lg:sticky lg:top-24"
           >
-            <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-indigo-500/10 to-transparent rounded-full blur-2xl pointer-events-none" />
+            <motion.div
+              aria-hidden="true"
+              className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-indigo-500/10 to-transparent rounded-full blur-2xl pointer-events-none"
+              animate={prefersReducedMotion ? undefined : { opacity: [0.6, 1, 0.6] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            />
             <div className="flex items-center gap-2 border-b border-zinc-800 pb-4">
               <Gauge className="w-4 h-4 text-indigo-400" />
               <h3 className="text-xs font-black uppercase tracking-widest text-zinc-300">Operational Parameters</h3>
             </div>
-            
+
             <div className="space-y-4 font-medium text-xs sm:text-sm">
               {data.specs.map((spec, i) => (
                 <div key={i} className="space-y-1">
@@ -499,7 +569,13 @@ export default function ServiceSlugPage() {
             <div className="pt-4 border-t border-zinc-800 grid grid-cols-2 gap-4 text-[11px] sm:text-xs font-mono text-zinc-400">
               <div className="space-y-0.5">
                 <span className="block text-zinc-600 font-bold uppercase tracking-wider scale-95 origin-left">Spectral Target</span>
-                <span className="text-emerald-400 font-bold block">Passed Target</span>
+                <span className="text-emerald-400 font-bold flex items-center gap-1.5">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
+                  </span>
+                  Passed Target
+                </span>
               </div>
               <div className="space-y-0.5">
                 <span className="block text-zinc-600 font-bold uppercase tracking-wider scale-95 origin-left">Certification Track</span>
@@ -509,37 +585,37 @@ export default function ServiceSlugPage() {
           </motion.div>
         </section>
 
-        <motion.hr variants={ITEM_VARIANTS} className="border-zinc-200/60 dark:border-zinc-900" />
+        <motion.hr {...revealProps} variants={REVEAL} className="border-zinc-200/60 dark:border-zinc-900" />
 
         {/* CORE CAPABILITIES STAGGER GRID */}
-        <section className="space-y-6">
-          <div className="space-y-1">
+        <motion.section {...revealProps} variants={REVEAL_STAGGER} className="space-y-6">
+          <motion.div variants={REVEAL} className="space-y-1">
             <span className="text-xs font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5"><Compass className="w-4 h-4" /> Production Scope Detail</span>
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-zinc-900 dark:text-white">Technical Core Capabilities</h2>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {data.deepCapabilities.map((cap, i) => (
-              <motion.div 
-                key={i} 
-                variants={ITEM_VARIANTS}
-                whileHover={{ y: -3, transition: { duration: 0.2 } }}
-                className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 rounded-2xl shadow-sm space-y-3 hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
+              <motion.div
+                key={i}
+                variants={REVEAL}
+                whileHover={prefersReducedMotion ? undefined : { y: -4, transition: { duration: 0.2 } }}
+                className="bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 rounded-2xl shadow-sm space-y-3 hover:border-indigo-300 dark:hover:border-indigo-800/60 hover:shadow-md transition-[border-color,box-shadow]"
               >
                 <div className="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-xs font-black font-mono">
-                  0{i+1}
+                  0{i + 1}
                 </div>
                 <h3 className="font-bold text-sm sm:text-base tracking-tight text-zinc-900 dark:text-white">{cap.title}</h3>
                 <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">{cap.desc}</p>
               </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* INTERACTIVE INTERLOCKING WORKFLOW PIPELINE */}
-        <motion.section variants={ITEM_VARIANTS} className="bg-zinc-900 text-white p-6 sm:p-10 rounded-3xl relative overflow-hidden border border-zinc-800">
-          <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
-          
+        <motion.section {...revealProps} variants={REVEAL} className="bg-zinc-900 text-white p-6 sm:p-10 rounded-3xl relative overflow-hidden border border-zinc-800">
+          <div aria-hidden="true" className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-12 relative z-10">
             <div className="space-y-4 lg:pr-4">
               <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400">Step-by-Step Processing</span>
@@ -547,17 +623,29 @@ export default function ServiceSlugPage() {
               <p className="text-xs sm:text-sm text-zinc-400 font-medium leading-relaxed">
                 Interact with the workflow steps to track how raw design documents route, verify, transform, and deliver across our internal manufacturing modules.
               </p>
-              
+
               {/* Vertical Tab Controls */}
-              <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto pt-2 pb-2 lg:py-0 scrollbar-none">
+              <div
+                role="tablist"
+                aria-orientation="vertical"
+                aria-label="Production workflow phases"
+                className="flex flex-row lg:flex-col gap-2 overflow-x-auto pt-2 pb-2 lg:py-0 scrollbar-none"
+              >
                 {data.productionWorkflow.map((flow, i) => (
                   <button
                     key={i}
+                    ref={(el) => { tabRefs.current[i] = el; }}
+                    role="tab"
+                    id={`workflow-tab-${i}`}
+                    aria-selected={activeWorkflowStep === i}
+                    aria-controls={`workflow-panel-${slug}`}
+                    tabIndex={activeWorkflowStep === i ? 0 : -1}
                     onClick={() => setActiveWorkflowStep(i)}
-                    className={`px-4 py-2.5 rounded-xl text-left text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center justify-between border ${
-                      activeWorkflowStep === i 
-                        ? "bg-indigo-600 border-indigo-500 text-white shadow-lg" 
-                        : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:text-zinc-300"
+                    onKeyDown={(e) => handleTabKeyDown(e, i)}
+                    className={`px-4 py-2.5 rounded-xl text-left text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center justify-between border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 ${
+                      activeWorkflowStep === i
+                        ? "bg-indigo-600 border-indigo-500 text-white shadow-lg"
+                        : "bg-zinc-950 border-zinc-800 text-zinc-500 hover:text-zinc-300 hover:border-zinc-700"
                     }`}
                   >
                     <span>Phase {flow.step}</span>
@@ -565,17 +653,34 @@ export default function ServiceSlugPage() {
                   </button>
                 ))}
               </div>
+
+              {/* Step progress dots — genuine sequence indicator */}
+              <div className="hidden lg:flex items-center gap-1.5 pt-1" aria-hidden="true">
+                {data.productionWorkflow.map((_, i) => (
+                  <span
+                    key={i}
+                    className={`h-1 rounded-full transition-all duration-300 ${
+                      i === activeWorkflowStep ? "w-6 bg-indigo-500" : "w-2.5 bg-zinc-800"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
 
             {/* Content Container Display Panel */}
-            <div className="lg:col-span-2 bg-zinc-950 border border-zinc-800/80 rounded-2xl p-5 sm:p-7 flex flex-col justify-between min-h-[220px]">
+            <div
+              id={`workflow-panel-${slug}`}
+              role="tabpanel"
+              aria-labelledby={`workflow-tab-${activeWorkflowStep}`}
+              className="lg:col-span-2 bg-zinc-950 border border-zinc-800/80 rounded-2xl p-5 sm:p-7 flex flex-col justify-between min-h-[220px]"
+            >
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeWorkflowStep}
-                  initial={{ opacity: 0, x: 10 }}
+                  initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, x: 12 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.15 }}
+                  exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, x: -12 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
                   className="space-y-3"
                 >
                   <div className="flex items-center justify-between border-b border-zinc-800/60 pb-3">
@@ -595,16 +700,35 @@ export default function ServiceSlugPage() {
                 </motion.div>
               </AnimatePresence>
 
-              <div className="flex items-center gap-2 pt-4 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest text-zinc-600 mt-auto">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Live Automated Press System Synchronized
+              <div className="flex items-center justify-between pt-4 mt-auto">
+                <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest text-zinc-600">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Live Automated Press System Synchronized
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] font-mono text-zinc-600">
+                  <button
+                    onClick={() => focusTab((activeWorkflowStep - 1 + stepCount) % stepCount)}
+                    aria-label="Previous phase"
+                    className="p-1.5 rounded-md border border-zinc-800 hover:border-zinc-600 hover:text-zinc-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5 rotate-180" />
+                  </button>
+                  <span>{activeWorkflowStep + 1} / {stepCount}</span>
+                  <button
+                    onClick={() => focusTab((activeWorkflowStep + 1) % stepCount)}
+                    aria-label="Next phase"
+                    className="p-1.5 rounded-md border border-zinc-800 hover:border-zinc-600 hover:text-zinc-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </motion.section>
 
         {/* COMPLIANCE CHECKLIST */}
-        <motion.section variants={ITEM_VARIANTS} className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-center bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 sm:p-10 rounded-3xl shadow-sm">
+        <motion.section {...revealProps} variants={REVEAL} className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-center bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 sm:p-10 rounded-3xl shadow-sm">
           <div className="space-y-3">
             <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center">
               <AlertTriangle className="w-5 h-5" />
@@ -617,12 +741,17 @@ export default function ServiceSlugPage() {
 
           <div className="lg:col-span-2 space-y-3 text-xs sm:text-sm font-medium text-zinc-700 dark:text-zinc-300">
             {data.engineeringChecklist.map((item, idx) => (
-              <div key={idx} className="flex items-start gap-3 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-900 p-3.5 rounded-xl">
+              <motion.div
+                key={idx}
+                whileHover={prefersReducedMotion ? undefined : { x: 3 }}
+                transition={{ duration: 0.15 }}
+                className="flex items-start gap-3 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-100 dark:border-zinc-900 p-3.5 rounded-xl"
+              >
                 <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                 <span className="leading-normal">{item}</span>
-              </div>
+              </motion.div>
             ))}
-            
+
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-zinc-100 dark:border-zinc-950 mt-4 text-[10px] sm:text-xs text-zinc-400 font-mono w-full">
               <span className="flex items-center gap-1.5"><Scale className="w-4 h-4 text-indigo-500" /> Method: {data.calibrations.method}</span>
               <span className="flex items-center gap-1.5"><FileText className="w-4 h-4 text-indigo-500" /> Standard: {data.calibrations.standard}</span>
@@ -631,15 +760,19 @@ export default function ServiceSlugPage() {
         </motion.section>
 
         {/* CALL TO ACTION HUB BRIDGE */}
-        <motion.section variants={ITEM_VARIANTS} className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-8 sm:p-10 rounded-3xl text-center space-y-5 max-w-5xl mx-auto shadow-xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-white/5 opacity-30 mix-blend-overlay pointer-events-none" />
+        <motion.section {...revealProps} variants={REVEAL} className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-8 sm:p-10 rounded-3xl text-center space-y-5 max-w-5xl mx-auto shadow-xl relative overflow-hidden">
+          <div aria-hidden="true" className="absolute inset-0 bg-white/5 opacity-30 mix-blend-overlay pointer-events-none" />
           <h2 className="text-xl sm:text-3xl font-black tracking-tight max-w-xl mx-auto leading-tight">Ready to map this specific track to your next project?</h2>
           <p className="text-xs sm:text-sm text-indigo-100 font-medium max-w-2xl mx-auto leading-relaxed">
             Connect directly with our engineering coordinators. Submit your material profiles, custom dielines, and run matrices to receive an instant mechanical quote layout.
           </p>
           <div className="pt-2">
-            <Link href="/contact" className="inline-flex items-center gap-2 bg-zinc-950 text-white font-black px-6 py-3.5 rounded-xl shadow-lg hover:bg-zinc-900 transition-colors text-xs uppercase tracking-widest duration-200">
-              Initiate Production Ticket <ChevronRight className="w-4 h-4" />
+            <Link
+              href="/contact"
+              className="group inline-flex items-center gap-2 bg-zinc-950 text-white font-black px-6 py-3.5 rounded-xl shadow-lg hover:bg-zinc-900 hover:shadow-xl transition-all text-xs uppercase tracking-widest duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-indigo-600"
+            >
+              Initiate Production Ticket
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </motion.section>

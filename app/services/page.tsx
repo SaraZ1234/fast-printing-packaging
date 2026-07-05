@@ -2,15 +2,15 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { 
-  ArrowRight, 
-  Sparkles, 
-  LayoutGrid, 
-  ShieldAlert, 
-  Gauge, 
+import {
+  ArrowRight,
+  Sparkles,
+  LayoutGrid,
+  ShieldAlert,
+  Gauge,
   Minimize2,
   FileCheck,
-  Eye
+  Eye,
 } from "lucide-react";
 
 // Master Industrial Data Stack with granular technical spec matrix arrays
@@ -19,125 +19,154 @@ const CATALOG = [
     group: "Core Print Infrastructure",
     description: "High-velocity modern transfer systems optimized for chromatic accuracy, dot gain minimization, and rapid plate configuration cycles.",
     items: [
-      { 
-        id: "digital-printing", 
-        name: "Digital Production Printing", 
+      {
+        id: "digital-printing",
+        name: "Digital Production Printing",
         detail: "Fast turnarounds, variable data fields, liquid electrophotographic imaging, and micro-serialization properties.",
-        specs: { speed: "Up to 4,500 sheets/hr", stock: "14pt – 32pt Caliper Board", color: "7-Color Indigo ElectroInk", tolerance: "Delta E < 1.2" }
+        specs: { speed: "Up to 4,500 sheets/hr", stock: "14pt – 32pt Caliper Board", color: "7-Color Indigo ElectroInk", tolerance: "Delta E < 1.2" },
       },
-      { 
-        id: "offset-printing", 
-        name: "Commercial Litho-Offset Printing", 
+      {
+        id: "offset-printing",
+        name: "Commercial Litho-Offset Printing",
         detail: "High-volume precision plate processing using real Heidelberg CMYK ink fountains and accurate Pantone Matching System setups.",
-        specs: { speed: "18,000 impressions/hr", stock: "60lb Text to 28pt Board", color: "10-Station Inline Aligned", tolerance: "Spectrophotometric Lock" }
+        specs: { speed: "18,000 impressions/hr", stock: "60lb Text to 28pt Board", color: "10-Station Inline Aligned", tolerance: "Spectrophotometric Lock" },
       },
-      { 
-        id: "screen-printing", 
-        name: "Screen Printing & Apparel Lines", 
+      {
+        id: "screen-printing",
+        name: "Screen Printing & Apparel Lines",
         detail: "Thick, highly durable ink deposits mapped cleanly over heavy-weave fabrics, promotional merchandise, and rigid gift boxes.",
-        specs: { speed: "Automated Carousel Lines", stock: "Textiles, Plastics, Wood, Metal", color: "High-Opacity Plastisol/Water-Based", tolerance: "High Profile Textures" }
+        specs: { speed: "Automated Carousel Lines", stock: "Textiles, Plastics, Wood, Metal", color: "High-Opacity Plastisol/Water-Based", tolerance: "High Profile Textures" },
       },
-      { 
-        id: "large-format", 
-        name: "Industrial Wide-Format Signage", 
+      {
+        id: "large-format",
+        name: "Industrial Wide-Format Signage",
         detail: "High-impact outdoor banners, fine-art posters, trade show backdrops, and flexible vinyl banners up to 60 inches wide.",
-        specs: { speed: "UV-Curable Inline Dryers", stock: "Scrim Vinyl, Gatorboard, Canvas", color: "High-Density Pigment Arrays", tolerance: "1200 DPI Native resolution" }
+        specs: { speed: "UV-Curable Inline Dryers", stock: "Scrim Vinyl, Gatorboard, Canvas", color: "High-Density Pigment Arrays", tolerance: "1200 DPI Native resolution" },
       },
-      { 
-        id: "flexography", 
-        name: "Flexography Web Packaging", 
+      {
+        id: "flexography",
+        name: "Flexography Web Packaging",
         detail: "Continuous roll-fed web rotary line systems engineered for high-throughput consumer labels, stand-up pouches, and wrap rollups.",
-        specs: { speed: "Up to 500 feet/min", stock: "BOPP Films, Clear Vinyl, Foil Laminates", color: "UV & Water-Based Rotogravure Tones", tolerance: "Continuous Web Registration" }
-      }
-    ]
+        specs: { speed: "Up to 500 feet/min", stock: "BOPP Films, Clear Vinyl, Foil Laminates", color: "UV & Water-Based Rotogravure Tones", tolerance: "Continuous Web Registration" },
+      },
+    ],
   },
   {
     group: "Structural Packaging & Identity",
     description: "CAD-designed protective parameters and secondary containment units verified via edge-crush structural analysis models.",
     items: [
-      { 
-        id: "custom-boxes", 
-        name: "Custom Structural Packaging Boxes", 
+      {
+        id: "custom-boxes",
+        name: "Custom Structural Packaging Boxes",
         detail: "Single and double-wall corrugated shipping boxes, mailers, and premium double-faced rigid chipboard luxury gift enclosures.",
-        specs: { speed: "Inline Die-Cutting Matrix", stock: "A, B, C, E, F Flute Profiles", color: "Flexo-Folder-Gluer Configured", tolerance: "ECT-32 to ECT-44 Structural Pass" }
+        specs: { speed: "Inline Die-Cutting Matrix", stock: "A, B, C, E, F Flute Profiles", color: "Flexo-Folder-Gluer Configured", tolerance: "ECT-32 to ECT-44 Structural Pass" },
       },
-      { 
-        id: "stickers-labels", 
-        name: "Labels & Weatherproof Stickers", 
+      {
+        id: "stickers-labels",
+        name: "Labels & Weatherproof Stickers",
         detail: "Roll-fed high-speed pressure-sensitive substrates engineered to precise custom geometric shapes with inline varnish seals.",
-        specs: { speed: "Digital Laser Matrix Cutting", stock: "Gloss Paper, Matte Vinyl, Clear Poly", color: "CMYK + Heavy Opaque White Base", tolerance: "Permanent / Removable Acrylic Grade" }
+        specs: { speed: "Digital Laser Matrix Cutting", stock: "Gloss Paper, Matte Vinyl, Clear Poly", color: "CMYK + Heavy Opaque White Base", tolerance: "Permanent / Removable Acrylic Grade" },
       },
-      { 
-        id: "shopping-bags", 
-        name: "Eco-Friendly Bags & Pouches", 
+      {
+        id: "shopping-bags",
+        name: "Eco-Friendly Bags & Pouches",
         detail: "Recycled premium kraft shopping carriers with reinforced twisted handles, gusseted bases, and high-barrier flexible pouches.",
-        specs: { speed: "Automated Bottom-Folding Assemblies", stock: "120GSM Recycled Kraft Paper", color: "Soy-Based Non-Toxic Inks", tolerance: "Up to 15kg Dynamic Load Limit" }
+        specs: { speed: "Automated Bottom-Folding Assemblies", stock: "120GSM Recycled Kraft Paper", color: "Soy-Based Non-Toxic Inks", tolerance: "Up to 15kg Dynamic Load Limit" },
       },
-      { 
-        id: "brand-identity", 
-        name: "Brand Dieline & Structural Engineering", 
+      {
+        id: "brand-identity",
+        name: "Brand Dieline & Structural Engineering",
         detail: "Comprehensive vector engineering, custom operational dieline configurations, volumetric stress tests, and unprinted physical proof sets.",
-        specs: { speed: "Structural CAD Preflight Execution", stock: "All Material Profiles Accessible", color: "Digital Structural Proof Renderings", tolerance: "0.01mm Structural Clearance Scale" }
-      }
-    ]
+        specs: { speed: "Structural CAD Preflight Execution", stock: "All Material Profiles Accessible", color: "Digital Structural Proof Renderings", tolerance: "0.01mm Structural Clearance Scale" },
+      },
+    ],
   },
   {
     group: "Specialty Commercial Printing",
     description: "Cosmetic enhancement layers and structural post-press applications engineered to separate premium branding profiles.",
     items: [
-      { 
-        id: "marketing-materials", 
-        name: "Enterprise Marketing Collateral", 
+      {
+        id: "marketing-materials",
+        name: "Enterprise Marketing Collateral",
         detail: "Premium multi-page brochures, saddle-stitched product profiles, perfect-bound lookbooks, and tri-fold presentation layout sheets.",
-        specs: { speed: "Inline Folding & Gathering Sheets", stock: "80lb – 100lb Gloss Book Coating", color: "Aqueous Coating (AQ) Over-All Layer", tolerance: "Perfect Trim Bleed Tracking" }
+        specs: { speed: "Inline Folding & Gathering Sheets", stock: "80lb – 100lb Gloss Book Coating", color: "Aqueous Coating (AQ) Over-All Layer", tolerance: "Perfect Trim Bleed Tracking" },
       },
-      { 
-        id: "business-cards", 
-        name: "Executive Stationery Systems", 
+      {
+        id: "business-cards",
+        name: "Executive Stationery Systems",
         detail: "Premium business cards, executive letterheads, legal matching envelopes, and matching presentation binder portfolios.",
-        specs: { speed: "Precision Pile Cutting Stations", stock: "130lb Super-Cover to 32pt Board", color: "Corporate Spot Pantone Matching", tolerance: "Frictionless Mechanical Scoring Lines" }
+        specs: { speed: "Precision Pile Cutting Stations", stock: "130lb Super-Cover to 32pt Board", color: "Corporate Spot Pantone Matching", tolerance: "Frictionless Mechanical Scoring Lines" },
       },
-      { 
-        id: "wedding-cards", 
-        name: "Specialty Embellishments & Invites", 
+      {
+        id: "wedding-cards",
+        name: "Specialty Embellishments & Invites",
         detail: "Metallic hot foil stamping, deep sculptural embossing, dual-level blind debossing, and premium artisanal card invitations.",
-        specs: { speed: "Platen Press Heavy Pressure Stamping", stock: "Cotton-Rag Blend Artisanal Stock", color: "Metallic Foils (Gold, Silver, Bronze)", tolerance: "Deep Compression Footprint Profiles" }
-      }
-    ]
-  }
+        specs: { speed: "Platen Press Heavy Pressure Stamping", stock: "Cotton-Rag Blend Artisanal Stock", color: "Metallic Foils (Gold, Silver, Bronze)", tolerance: "Deep Compression Footprint Profiles" },
+      },
+    ],
+  },
+];
+
+const FILTER_TABS = [
+  { id: "all", label: "Complete Infrastructure Matrix" },
+  { id: "print", label: "Press Lines" },
+  { id: "packaging", label: "Structural Packaging" },
+  { id: "specialty", label: "Tactile Finishes" },
 ];
 
 // Animation Configurations
 const CONTAINER_VARIANTS = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } }
+  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
 };
 
 const ITEM_VARIANTS = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", damping: 22, stiffness: 90 } }
+  show: { opacity: 1, y: 0, transition: { type: "spring", damping: 22, stiffness: 90 } },
 };
 
 export default function ServicesPage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
-  const filteredCatalog = activeCategory === "all" 
-    ? CATALOG 
-    : CATALOG.filter(cat => cat.group.toLowerCase().includes(activeCategory.toLowerCase()));
+  const filteredCatalog =
+    activeCategory === "all" ? CATALOG : CATALOG.filter((cat) => cat.group.toLowerCase().includes(activeCategory.toLowerCase()));
 
   return (
     <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white pt-16 overflow-x-hidden antialiased">
-      
+      <style jsx global>{`
+        a:focus-visible,
+        button:focus-visible {
+          outline: 2px solid rgb(79 70 229);
+          outline-offset: 3px;
+          border-radius: 6px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          *,
+          *::before,
+          *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+          }
+        }
+      `}</style>
+
       {/* SECTION 1: HERO OVERLAY BLOCK */}
-      <section className="relative overflow-hidden border-b border-zinc-200/60 dark:border-zinc-900 bg-white dark:bg-zinc-950 pt-20 pb-16">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-[400px] h-[400px] bg-fuchsia-500/5 rounded-full blur-3xl pointer-events-none" />
-        
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+      <section className="relative overflow-hidden border-b border-zinc-200/60 dark:border-zinc-900 bg-white dark:bg-zinc-950 pt-16 sm:pt-20 pb-14 sm:pb-16">
+        <div className="absolute top-0 right-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-[260px] sm:w-[400px] h-[260px] sm:h-[400px] bg-fuchsia-500/5 rounded-full blur-3xl pointer-events-none" />
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10"
+        >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 text-xs font-mono font-bold uppercase tracking-wider mb-6">
             <Sparkles className="w-4 h-4" /> Production Capabilities Center
           </div>
-          <h1 className="max-w-4xl font-black text-5xl sm:text-7xl text-zinc-900 dark:text-white tracking-tight leading-[0.95]">
+          <h1 className="max-w-4xl font-black text-4xl sm:text-6xl lg:text-7xl text-zinc-900 dark:text-white tracking-tight leading-[1.05] sm:leading-[0.95]">
             Everything that runs through our shop floor.
           </h1>
           <p className="mt-6 max-w-3xl text-sm sm:text-base lg:text-lg text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
@@ -145,34 +174,31 @@ export default function ServicesPage() {
           </p>
 
           {/* Interactive Live Segment Filtering Controls */}
-          <div className="mt-12 flex flex-wrap gap-3 border-t border-zinc-100 dark:border-zinc-900 pt-8">
-            {[
-              { id: "all", label: "Complete Infrastructure Matrix" },
-              { id: "print", label: "Press Lines" },
-              { id: "packaging", label: "Structural Packaging" },
-              { id: "specialty", label: "Tactile Finishes" }
-            ].map((tab) => (
-              <button
+          <div className="mt-10 sm:mt-12 flex flex-wrap gap-3 border-t border-zinc-100 dark:border-zinc-900 pt-8">
+            {FILTER_TABS.map((tab) => (
+              <motion.button
                 key={tab.id}
                 onClick={() => setActiveCategory(tab.id)}
-                className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 ${
-                  activeCategory === tab.id 
-                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/10" 
+                aria-pressed={activeCategory === tab.id}
+                whileTap={{ scale: 0.96 }}
+                className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-colors duration-200 ${
+                  activeCategory === tab.id
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/10"
                     : "bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200/70 dark:hover:bg-zinc-800"
                 }`}
               >
                 {tab.label}
-              </button>
+              </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* SECTION 2: GRANULAR SYSTEM DATA LOOP */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 space-y-24">
-        <AnimatePresence mode="wait">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20 space-y-20 sm:space-y-24">
+        <AnimatePresence>
           {filteredCatalog.map((cat) => (
-            <motion.div 
+            <motion.div
               key={cat.group}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -184,7 +210,7 @@ export default function ServicesPage() {
               <div className="space-y-3 border-b border-zinc-200 dark:border-zinc-800 pb-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <h2 className="font-black text-2xl sm:text-3xl text-zinc-900 dark:text-white tracking-tight flex items-center gap-2.5">
-                    <LayoutGrid className="w-6 h-6 text-indigo-600" /> {cat.group}
+                    <LayoutGrid className="w-6 h-6 text-indigo-600 shrink-0" /> {cat.group}
                   </h2>
                   <span className="self-start sm:self-auto text-xs font-mono font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/40 px-3 py-1.5 rounded-lg">
                     {cat.items.length} Active Production Lines
@@ -194,46 +220,44 @@ export default function ServicesPage() {
               </div>
 
               {/* Sub-item Grid Layout Container */}
-              <motion.div 
+              <motion.div
                 variants={CONTAINER_VARIANTS}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, margin: "-80px" }}
-                className="grid gap-8 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
+                className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
               >
                 {cat.items.map((item) => (
-                  <motion.div 
+                  <motion.div
                     key={item.name}
                     variants={ITEM_VARIANTS}
                     whileHover={{ y: -5 }}
-                    className="group bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 rounded-2xl flex flex-col justify-between shadow-sm hover:shadow-xl hover:border-indigo-500/20 transition-all duration-300 relative overflow-hidden"
+                    className="group bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 p-6 rounded-2xl flex flex-col justify-between shadow-sm hover:shadow-xl hover:border-indigo-500/20 transition-shadow duration-300 relative overflow-hidden"
                   >
                     <div className="space-y-5">
                       <div className="space-y-2">
                         <h3 className="font-black text-lg sm:text-xl text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors tracking-tight">
                           {item.name}
                         </h3>
-                        <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
-                          {item.detail}
-                        </p>
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">{item.detail}</p>
                       </div>
 
                       {/* Micro Mechanical Specification Matrix Grid */}
                       <div className="bg-zinc-50 dark:bg-zinc-950 p-4 rounded-xl border border-zinc-100 dark:border-zinc-900 grid grid-cols-2 gap-y-4 gap-x-3 text-xs sm:text-sm">
-                        <div className="space-y-0.5">
-                          <span className="block text-zinc-400 dark:text-zinc-500 font-mono font-bold uppercase tracking-wider text-[10px] scale-95 origin-left">Operational Velocity</span>
+                        <div className="space-y-0.5 min-w-0">
+                          <span className="block text-zinc-400 dark:text-zinc-500 font-mono font-bold uppercase tracking-wider text-[10px]">Operational Velocity</span>
                           <span className="font-mono font-bold text-zinc-800 dark:text-zinc-200 block text-xs sm:text-sm">{item.specs.speed}</span>
                         </div>
-                        <div className="space-y-0.5">
-                          <span className="block text-zinc-400 dark:text-zinc-500 font-mono font-bold uppercase tracking-wider text-[10px] scale-95 origin-left">Substrate Gauge</span>
-                          <span className="font-mono font-bold text-zinc-800 dark:text-zinc-200 truncate block text-xs sm:text-sm">{item.specs.stock}</span>
+                        <div className="space-y-0.5 min-w-0">
+                          <span className="block text-zinc-400 dark:text-zinc-500 font-mono font-bold uppercase tracking-wider text-[10px]">Substrate Gauge</span>
+                          <span className="font-mono font-bold text-zinc-800 dark:text-zinc-200 truncate block text-xs sm:text-sm" title={item.specs.stock}>{item.specs.stock}</span>
                         </div>
-                        <div className="space-y-0.5">
-                          <span className="block text-zinc-400 dark:text-zinc-500 font-mono font-bold uppercase tracking-wider text-[10px] scale-95 origin-left">Color Mapping</span>
-                          <span className="font-mono font-bold text-zinc-800 dark:text-zinc-200 truncate block text-xs sm:text-sm">{item.specs.color}</span>
+                        <div className="space-y-0.5 min-w-0">
+                          <span className="block text-zinc-400 dark:text-zinc-500 font-mono font-bold uppercase tracking-wider text-[10px]">Color Mapping</span>
+                          <span className="font-mono font-bold text-zinc-800 dark:text-zinc-200 truncate block text-xs sm:text-sm" title={item.specs.color}>{item.specs.color}</span>
                         </div>
-                        <div className="space-y-0.5">
-                          <span className="block text-zinc-400 dark:text-zinc-500 font-mono font-bold uppercase tracking-wider text-[10px] scale-95 origin-left">Registration Limit</span>
+                        <div className="space-y-0.5 min-w-0">
+                          <span className="block text-zinc-400 dark:text-zinc-500 font-mono font-bold uppercase tracking-wider text-[10px]">Registration Limit</span>
                           <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400 block text-xs sm:text-sm">{item.specs.tolerance}</span>
                         </div>
                       </div>
@@ -253,45 +277,65 @@ export default function ServicesPage() {
             </motion.div>
           ))}
         </AnimatePresence>
+
+        {filteredCatalog.length === 0 && (
+          <div className="text-center py-16">
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">No production lines match that filter yet.</p>
+          </div>
+        )}
       </section>
 
       {/* SECTION 3: COMPLIANCE PREFLIGHT SPECIFICATION PROTOCOLS */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="bg-zinc-900 border border-zinc-800 p-8 sm:p-12 rounded-3xl text-white grid grid-cols-1 lg:grid-cols-3 gap-12 items-center relative overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="bg-zinc-900 border border-zinc-800 p-6 sm:p-8 lg:p-12 rounded-3xl text-white grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-12 items-center relative overflow-hidden"
+        >
           <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-indigo-500/10 to-transparent pointer-events-none" />
-          
+
           <div className="lg:col-span-1 space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center"><ShieldAlert className="w-6 h-6" /></div>
+            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center">
+              <ShieldAlert className="w-6 h-6" />
+            </div>
             <h3 className="text-2xl sm:text-3xl font-black tracking-tight pt-2 text-white">Prepress Validation Requirements</h3>
             <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-medium">To maintain our high operational efficiency, ensure all incoming digital graphic layouts strictly follow our shop floor file profile system parameters.</p>
           </div>
 
-          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs sm:text-sm font-medium">
-            <div className="bg-zinc-950/60 p-5 rounded-2xl border border-zinc-800 space-y-2">
-              <h4 className="font-bold text-zinc-200 text-sm sm:text-base flex items-center gap-2"><FileCheck className="w-5 h-5 text-indigo-400" /> Native Color Space Profiles</h4>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">Supply all file objects natively inside the CMYK color space. Explicitly tag vector spot elements with genuine Pantone Coated (PMS C) naming parameters.</p>
-            </div>
-            <div className="bg-zinc-950/60 p-5 rounded-2xl border border-zinc-800 space-y-2">
-              <h4 className="font-bold text-zinc-200 text-sm sm:text-base flex items-center gap-2"><Gauge className="w-5 h-5 text-indigo-400" /> Bleed & Safe Trim Margins</h4>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">A minimum boundary perimeter bleed of 0.125 inches (3.175mm) is required. Maintain text fields at least 0.1875 inches inside structural trim pathways.</p>
-            </div>
-            <div className="bg-zinc-950/60 p-5 rounded-2xl border border-zinc-800 space-y-2">
-              <h4 className="font-bold text-zinc-200 text-sm sm:text-base flex items-center gap-2"><Minimize2 className="w-5 h-5 text-indigo-400" /> Vector Paths & Font Preservation</h4>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">Convert all font geometries into outlines. Supply vector dielines for die-cut packaging elements on an independent, non-printing design layer marked as spot color.</p>
-            </div>
-            <div className="bg-zinc-950/60 p-5 rounded-2xl border border-zinc-800 space-y-2">
-              <h4 className="font-bold text-zinc-200 text-sm sm:text-base flex items-center gap-2"><Eye className="w-5 h-5 text-indigo-400" /> Image Resolution Matrix</h4>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">Raster images embedded within print documents must carry a resolution profile of 300 DPI at 100% placement dimension scale to eliminate artifact compression.</p>
-            </div>
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 text-xs sm:text-sm font-medium">
+            {[
+              { icon: FileCheck, title: "Native Color Space Profiles", body: "Supply all file objects natively inside the CMYK color space. Explicitly tag vector spot elements with genuine Pantone Coated (PMS C) naming parameters." },
+              { icon: Gauge, title: "Bleed & Safe Trim Margins", body: "A minimum boundary perimeter bleed of 0.125 inches (3.175mm) is required. Maintain text fields at least 0.1875 inches inside structural trim pathways." },
+              { icon: Minimize2, title: "Vector Paths & Font Preservation", body: "Convert all font geometries into outlines. Supply vector dielines for die-cut packaging elements on an independent, non-printing design layer marked as spot color." },
+              { icon: Eye, title: "Image Resolution Matrix", body: "Raster images embedded within print documents must carry a resolution profile of 300 DPI at 100% placement dimension scale to eliminate artifact compression." },
+            ].map((req, i) => {
+              const Icon = req.icon;
+              return (
+                <div key={i} className="bg-zinc-950/60 p-5 rounded-2xl border border-zinc-800 space-y-2 hover:border-indigo-500/30 transition-colors duration-300">
+                  <h4 className="font-bold text-zinc-200 text-sm sm:text-base flex items-center gap-2">
+                    <Icon className="w-5 h-5 text-indigo-400 shrink-0" /> {req.title}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">{req.body}</p>
+                </div>
+              );
+            })}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* SECTION 4: HIGH-VOLUME HIGH-THROUGHPUT CTA */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-24 pt-12">
-        <div className="relative overflow-hidden bg-gradient-to-b from-indigo-600 to-indigo-700 text-white p-12 rounded-3xl shadow-xl shadow-indigo-600/10 text-center">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20 sm:pb-24 pt-12">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="relative overflow-hidden bg-gradient-to-b from-indigo-600 to-indigo-700 text-white p-8 sm:p-12 rounded-3xl shadow-xl shadow-indigo-600/10 text-center"
+        >
           <div className="absolute inset-0 bg-white/5 opacity-40 mix-blend-overlay pointer-events-none" />
-          
+
           <h2 className="font-black text-3xl sm:text-4xl tracking-tight text-white max-w-2xl mx-auto leading-tight">
             Need an item profile engineered that isn't listed here?
           </h2>
@@ -301,12 +345,12 @@ export default function ServicesPage() {
           <div className="pt-6">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-zinc-950 text-white font-black px-8 py-4 rounded-xl shadow-lg hover:bg-zinc-900 transition-colors text-sm sm:text-base duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-600 focus:ring-zinc-950"
+              className="inline-flex items-center gap-2 bg-zinc-950 text-white font-black px-8 py-4 rounded-xl shadow-lg hover:bg-zinc-900 hover:-translate-y-0.5 active:translate-y-0 transition-all text-sm sm:text-base duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-600 focus:ring-zinc-950"
             >
               Consult Production Engineering <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-        </div>
+        </motion.div>
       </section>
     </main>
   );
